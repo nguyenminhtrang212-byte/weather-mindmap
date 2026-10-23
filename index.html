@@ -891,8 +891,22 @@ const fmtT=s=>`${Math.floor(s/60)}:${String(Math.round(s%60)).padStart(2,"0")}`;
 async function startRec(){
   const msg=t=>{const m=$("#recmsg");if(m)m.innerHTML=t};
   if(!ST.name.trim()){msg(`<span class="warn">Em gõ họ tên ở đầu trang trước khi ghi âm nhé.</span>`);$("#sname").focus();return}
-  if(!navigator.mediaDevices||!window.MediaRecorder){msg("Trình duyệt này chưa ghi âm được. Hãy mở bằng Chrome (máy tính/Android) hoặc Safari (iPhone).");return}
-  let s;try{s=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}})}catch(e){msg(`<span class="warn">Máy chưa cho dùng micro. Em bấm <b>Cho phép</b> (Allow) khi trình duyệt hỏi, hoặc bật micro trong phần cài đặt của trình duyệt.</span>`);return}
+  const GH="https://nguyenminhtrang212-byte.github.io/weather-mindmap/";
+  const ua=navigator.userAgent||"",inApp=/Zalo|FBAN|FBAV|FB_IAB|Instagram|Line\/|Messenger|TikTok|; wv\)/i.test(ua),framed=window.top!==window.self;
+  const ios=/iPhone|iPad|iPod/.test(ua),android=/Android/.test(ua);
+  const openOut=`<div style="margin-top:6px"><b>Cách sửa:</b> mở trang bằng ${ios?"<b>Safari</b>":"<b>Chrome</b>"}: bấm dấu <b>⋯</b> (góc trên) → <b>Mở bằng trình duyệt</b>. Hoặc sao chép link rồi dán vào ${ios?"Safari":"Chrome"}:<br><input readonly value="${GH}" style="width:100%;margin-top:4px;padding:6px;border:1px solid var(--rule);border-radius:6px" onclick="this.select()"></div>`;
+  if(framed){msg(`<span class="warn">Trang đang mở bên trong một khung (ví dụ trong Claude) nên không được dùng micro.</span>${openOut}`);return}
+  if(inApp){msg(`<span class="warn">Em đang mở trang trong ứng dụng (Zalo, Messenger, Facebook…). Trình duyệt bên trong ứng dụng này không cho ghi âm.</span>${openOut}`);return}
+  if(!window.isSecureContext||!navigator.mediaDevices||!window.MediaRecorder){msg(`<span class="warn">Trình duyệt này chưa ghi âm được.</span>${openOut}`);return}
+  msg("🎙 Đang xin quyền dùng micro… Nếu trình duyệt hỏi, em bấm <b>Cho phép</b> (Allow).");
+  let s;try{s=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}})}catch(e){
+    const n=e&&e.name||"";
+    if(n==="NotFoundError"||n==="OverconstrainedError"){msg(`<span class="warn">Không tìm thấy micro.</span> Em kiểm tra máy có micro/tai nghe có micro và đã cắm chưa, rồi bấm ghi âm lại.`);return}
+    if(n==="NotReadableError"||n==="AbortError"){msg(`<span class="warn">Micro đang bị ứng dụng khác dùng hoặc bị máy tắt.</span> Em tắt Zoom/Meet/ứng dụng đang dùng micro rồi thử lại.${!ios&&!android?" Trên Windows: Cài đặt → Quyền riêng tư → Micrô → bật “Cho phép ứng dụng truy cập micrô” và “cho ứng dụng máy tính”.":""}`);return}
+    msg(`<span class="warn">Trình duyệt đang chặn micro cho trang này, nên không hiện câu hỏi nữa.</span>
+      <div style="margin-top:6px"><b>Cách mở lại:</b> ${ios?"Vào <b>Cài đặt → Safari → Micrô</b> → chọn <b>Hỏi</b> hoặc <b>Cho phép</b>. Rồi tải lại trang.":android?"Bấm biểu tượng <b>ⓘ / 🔒</b> bên trái thanh địa chỉ → <b>Quyền</b> → <b>Micrô</b> → <b>Cho phép</b>. Nếu vẫn không được: Cài đặt điện thoại → Ứng dụng → Chrome → Quyền → Micrô → Cho phép.":"Bấm biểu tượng <b>🔒 / ⚙</b> bên trái thanh địa chỉ → <b>Micrô</b> → chọn <b>Cho phép</b>, rồi tải lại trang (F5). Trên Windows, kiểm tra thêm: Cài đặt → Quyền riêng tư → Micrô → bật cho trình duyệt."}</div>
+      <button class="btn" style="margin-top:8px" onclick="location.reload()">↻ Tải lại trang</button>`);return}
+  msg("");
   const mime=pickMime();let mr;try{mr=new MediaRecorder(s,mime?{mimeType:mime,audioBitsPerSecond:48000}:{})}catch(e){mr=new MediaRecorder(s)}
   const chunks=[];mr.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
   mr.onstop=()=>{s.getTracks().forEach(t=>t.stop());const blob=new Blob(chunks,{type:mr.mimeType||"audio/webm"});const i=RECS.length;
