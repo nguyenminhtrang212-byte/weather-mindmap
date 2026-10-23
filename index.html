@@ -1,0 +1,966 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Weather Mindmap</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Charis+SIL:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* Layout: a hand-drawn study map — a 12-month season dial in the middle, six branches wired to it; tabs turn the same map into recall, sorting, a quiz and a speaking builder. */
+:root{
+  --bg:#EEF2F7; --card:#FFFFFF; --ink:#1D2B53; --muted:#5B6785; --rule:#C9D6EE;
+  --hl:#FFE45C; --hl-ink:#1D2B53; --ok:#1E7F5C; --ok-bg:#E3F4EC; --bad:#B83A2E; --bad-bg:#FBE9E6;
+  --dry:#C77700; --rainy:#1F6FAE; --feel:#B8336E; --act:#257A4D; --res:#6E45BE; --pat:#1D2B53;
+  --onseg:#FFFFFF; --ask:#0E7C86;
+  --hot:var(--dry); --rain:var(--rainy); --adv:var(--act); --prob:var(--res); --here:var(--pat);
+  --shadow:0 1px 0 #C9D6EE, 0 8px 24px -14px rgba(29,43,83,.28);
+  --ui:"Be Vietnam Pro","Segoe UI",Roboto,Arial,sans-serif;
+  --word:"Charis SIL","Doulos SIL","Gentium Plus","Noto Serif",Georgia,serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111827; --card:#1B2438; --ink:#E6EAF2; --muted:#9AA6C2; --rule:#2E3A55;
+  --hl:#E8C93A; --hl-ink:#111827; --ok:#5FD1A4; --ok-bg:#16352C; --bad:#F08A7E; --bad-bg:#3A1F1C;
+  --dry:#F2B544; --rainy:#6BB3E8; --feel:#F07FAE; --act:#5FD1A4; --res:#B79BF0; --pat:#E6EAF2; --ask:#43C6C4;
+  --onseg:#111827; --shadow:0 1px 0 #2E3A55, 0 8px 24px -14px rgba(0,0,0,.6); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111827; --card:#1B2438; --ink:#E6EAF2; --muted:#9AA6C2; --rule:#2E3A55;
+  --hl:#E8C93A; --hl-ink:#111827; --ok:#5FD1A4; --ok-bg:#16352C; --bad:#F08A7E; --bad-bg:#3A1F1C;
+  --dry:#F2B544; --rainy:#6BB3E8; --feel:#F07FAE; --act:#5FD1A4; --res:#B79BF0; --pat:#E6EAF2; --ask:#43C6C4;
+  --onseg:#111827; --shadow:0 1px 0 #2E3A55, 0 8px 24px -14px rgba(0,0,0,.6); color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:16px;line-height:1.5}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--hl);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1120px;margin:0 auto;padding-block:20px 72px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header h1{font-family:var(--word);font-weight:700;font-size:clamp(30px,6vw,46px);line-height:1.05;margin:4px 0 6px;text-wrap:balance}
+header p{margin:0;color:var(--muted);max-width:64ch}
+.goal{margin-top:10px;font-size:15px;background:var(--card);border-radius:10px;padding:10px 14px;box-shadow:var(--shadow);max-width:780px}
+.goal b{font-family:var(--word);font-size:17px}
+.topbar{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;margin-top:14px}
+.topbar label{display:flex;flex-direction:column;font-size:12px;color:var(--muted);gap:2px}
+.topbar input,.topbar select{border:1.5px solid var(--rule);background:var(--card);border-radius:8px;padding:8px 10px;font-size:15px;min-width:0}
+.topbar .nm{flex:1 1 240px;max-width:360px}
+.topbar .vc{flex:1 1 220px;max-width:320px}
+.tabs{display:flex;gap:4px;overflow-x:auto;background:var(--card);padding:4px;border-radius:12px;margin:16px 0 14px;box-shadow:var(--shadow);position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.tabs button{flex:1 0 auto;border:0;background:transparent;padding:10px 12px;border-radius:9px;font-weight:600;font-size:14px;color:var(--muted);white-space:nowrap}
+.tabs button[aria-selected="true"]{background:var(--ink);color:var(--card)}
+.hint{color:var(--muted);font-size:14px;margin:0 0 12px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{border:1.5px solid var(--ink);background:transparent;border-radius:10px;padding:10px 16px;font-weight:600}
+.btn.primary{background:var(--ink);color:var(--card)}
+.btn:disabled{opacity:.4;cursor:default}
+.linkbtn{border:0;background:none;color:var(--muted);text-decoration:underline;padding:4px 0;font-size:14px}
+.speak{border:1px solid var(--rule);background:var(--card);border-radius:50%;width:34px;height:34px;font-size:15px;flex:0 0 auto}
+.card{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:16px 18px}
+
+/* ---------- SƠ ĐỒ CHIA NHÁNH ---------- */
+.mmtools{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin-bottom:10px;font-size:14px}
+.focus{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.focus .fl{font-size:13px;color:var(--muted)}
+.fchip{--c:var(--ink);border:1.5px solid var(--rule);background:var(--card);border-radius:999px;padding:4px 10px;font-size:13px;font-weight:600}
+.fchip[aria-pressed="true"]{border-color:var(--c);background:var(--c);color:var(--card)}
+.zoom{display:inline-flex;align-items:center;border:1.5px solid var(--rule);border-radius:10px;overflow:hidden;background:var(--card);margin-left:auto}
+.zoom button{border:0;background:transparent;padding:5px 10px;font-weight:700;font-size:15px}
+.zoom span{font-size:12px;color:var(--muted);min-width:42px;text-align:center;font-variant-numeric:tabular-nums}
+.mmview{overflow-x:auto;overflow-y:hidden;border-radius:16px;background-color:var(--card);background-image:radial-gradient(var(--rule) 1px,transparent 1.3px);background-size:18px 18px;box-shadow:var(--shadow)}
+.mmsizer{position:relative}
+.mmstage{position:absolute;left:0;top:0;transform-origin:0 0}
+.mmsvg{position:absolute;left:0;top:0;overflow:visible}
+.mmsvg .tp{opacity:.92}
+.mmsvg .lk{fill:none;stroke-width:2.4;stroke-linecap:round}
+.mn{position:absolute;left:0;top:0}
+.mn.center{width:204px;text-align:center;background:var(--card);border:3px solid var(--ink);border-radius:30px;padding:10px 10px 12px;box-shadow:var(--shadow);z-index:2}
+.mn.center .ct{font-family:var(--word);font-weight:700;font-size:30px;line-height:1}
+.mn.center .cs{font-size:12px;color:var(--muted);margin:2px 0 4px}
+.dial{width:142px;display:block;margin:0 auto}
+.dial text{font-family:var(--ui);font-weight:700}
+.seasons{display:flex;justify-content:center;gap:4px 10px;font-size:12px;margin-top:4px;flex-wrap:wrap}
+.seasons span{display:inline-flex;align-items:center;gap:5px}
+.seasons i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.mn.br{display:flex;align-items:center;gap:8px;padding:7px 12px 7px 9px;border-radius:999px;border:2.5px solid var(--c);background:color-mix(in srgb,var(--c) 12%,var(--card));text-align:left;color:var(--ink);box-shadow:var(--shadow);max-width:210px;z-index:2}
+.mn.br .be{font-size:22px;line-height:1}
+.mn.br .bt{min-width:0}
+.mn.br .ben{display:block;font-family:var(--word);font-weight:700;font-size:18px;line-height:1.1;color:var(--c)}
+.mn.br .bvi{display:block;font-size:11.5px;color:var(--muted);line-height:1.25}
+.mn.br .bplus{font-size:12px;font-weight:700;background:var(--c);color:var(--card);border-radius:999px;padding:1px 7px;white-space:nowrap}
+.mn.lf{--c:var(--ink);display:block;padding:2px 6px 3px;border:0;border-bottom:2.5px solid var(--c);background:transparent;border-radius:6px 6px 0 0;text-align:left;font-size:15px;color:var(--ink);max-width:250px;z-index:1}
+.mn.lf.L{text-align:right}
+button.mn.lf:hover{background:color-mix(in srgb,var(--c) 14%,transparent)}
+.mn.lf .le{font-size:15px;margin-right:5px}
+.mn.lf .lw{font-family:var(--word);font-weight:700;font-size:16.5px;line-height:1.3}
+.mn.lf.sent{max-width:340px}
+.mn.lf.sent .lw{font-weight:400;font-size:15.5px}
+.mn.lf .lv{display:none;font-size:12px;color:var(--muted);font-family:var(--ui)}
+.showvi .mn.lf .lv{display:block}
+.vert .mn.br{max-width:136px;border-radius:14px;padding:6px 9px 6px 7px}
+.vert .mn.br .ben{font-size:16px}
+.vert .mn.lf{max-width:172px}
+.vert .mn.lf.sent{max-width:182px}
+.vert .mn.center{width:196px}
+.chaincap{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13.5px;margin-top:10px;color:var(--muted)}
+.chaincap span{padding:2px 9px;border-radius:999px;font-weight:600;color:var(--c);background:color-mix(in srgb,var(--c) 13%,var(--card))}
+
+/* detail sheet */
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:20;padding:0 max(12px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));display:flex;justify-content:center;pointer-events:none}
+.sheet[hidden]{display:none}
+.sheet .in{pointer-events:auto;width:100%;max-width:460px;background:var(--card);border-radius:16px;box-shadow:0 10px 40px -10px rgba(0,0,0,.45);border-top:5px solid var(--c);padding:14px 16px 16px;position:relative}
+.sheet .x{position:absolute;top:8px;right:8px;border:0;background:transparent;font-size:22px;color:var(--muted);width:36px;height:36px}
+.sheet .sw{font-family:var(--word);font-size:30px;font-weight:700;line-height:1.1;padding-right:32px}
+.ipa{font-family:var(--word);font-size:19px;background:linear-gradient(transparent 55%,var(--hl) 55%);color:var(--ink);padding:0 3px}
+.sheet .svi{font-size:18px;font-weight:600;margin:8px 0 4px}
+.sheet .sex{font-family:var(--word);font-size:17px;margin:0}
+.sheet .sbr{font-size:12.5px;color:var(--c);font-weight:600}
+
+.mn.lf .kv{font-weight:700;text-decoration:underline;text-decoration-color:var(--c);text-decoration-thickness:2px;text-underline-offset:3px}
+.seg2{display:inline-flex;border:1.5px solid var(--rule);border-radius:10px;overflow:hidden;background:var(--card)}
+.seg2 button{border:0;background:transparent;padding:7px 12px;font-size:14px;font-weight:600;color:var(--muted)}
+.seg2 button[aria-pressed="true"]{background:var(--ink);color:var(--card)}
+.mn.lf.blank{display:block}
+.mn.lf.blank .lw input{width:auto}
+.mn.lf.blank .bvi2{display:block}
+.mn.lf.blank .num{margin-right:4px}
+.mn.lf .fix{display:block}
+.sheet .sw .kv{text-decoration:underline;text-decoration-color:var(--c);text-decoration-thickness:3px;text-underline-offset:4px}
+.sheet .sw{font-size:24px;line-height:1.3}
+.sheet .svi{margin:0;font-size:16px}
+.kvrow,.reply,.snote{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:10px;padding:8px 10px;border-radius:10px;background:var(--bg);font-size:15px}
+.kvrow b{font-family:var(--word);font-size:18px}
+.kl{font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--c);width:100%}
+.reply i{font-family:var(--word);font-size:17px}
+.dlg{margin-top:14px;display:grid;gap:8px}
+.dl{display:flex;align-items:center;gap:8px;flex-wrap:wrap;border-left:4px solid var(--c);padding:4px 8px;border-radius:6px}
+.dl .who{font-weight:700;width:18px}
+.dl .tag{font-size:12px;font-weight:600;color:var(--c);background:color-mix(in srgb,var(--c) 13%,var(--card));border-radius:999px;padding:1px 8px}
+.dl .t{font-family:var(--word);font-size:17px;flex:1;min-width:12em}
+.dl.now{background:color-mix(in srgb,var(--hl) 45%,var(--card))}
+/* recall */
+.mn.lf.blank{display:block;gap:2px 5px;border-bottom-style:dashed;padding:3px 6px 4px;cursor:text;background:color-mix(in srgb,var(--c) 7%,transparent)}
+.mn.lf.blank input{border:0;border-bottom:1.5px solid var(--rule);background:transparent;font-family:var(--word);font-size:16px;font-weight:700;padding:1px 2px;outline:none;color:var(--ink)}
+.mn.lf.blank input:focus{border-bottom-color:var(--c)}
+.mn.lf.blank .num{font-size:11px;font-weight:700;color:var(--c)}
+.mn.lf.blank .bvi2{flex-basis:100%;font-size:12px;color:var(--muted)}
+.mn.lf.blank.ok{border-bottom-style:solid;border-bottom-color:var(--ok);background:var(--ok-bg)}
+.mn.lf.blank.ok input{color:var(--ok)}
+.mn.lf.blank.no{border-bottom-style:solid;border-bottom-color:var(--bad);background:var(--bad-bg)}
+.mn.lf.blank.no input{color:var(--bad);text-decoration:line-through}
+.mn.lf .fix{font-family:var(--word);font-weight:700;color:var(--ok);flex-basis:100%}
+.dock{position:sticky;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:4;margin-top:16px;display:flex;justify-content:center}
+.dock .card{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;padding:10px 14px}
+
+/* sort */
+.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.scard{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.scard .top{display:flex;align-items:center;gap:8px}
+.scard .w{font-family:var(--word);font-size:20px;font-weight:700;flex:1;min-width:0}
+.scard .v{font-size:13px;color:var(--muted)}
+.bins{display:flex;gap:5px;flex-wrap:wrap}
+.bin{--c:var(--ink);border:1.5px solid var(--rule);background:var(--card);border-radius:8px;padding:5px 7px;font-size:13px;font-weight:600;display:inline-flex;gap:4px;align-items:center}
+.bin[aria-pressed="true"]{border-color:var(--c);background:var(--c);color:var(--card)}
+.scard.ok{outline:2px solid var(--ok)}
+.scard.no{outline:2px solid var(--bad)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;margin-bottom:12px}
+.legend span{display:inline-flex;gap:4px;align-items:center}
+
+/* quiz runner + review */
+.meta{display:flex;justify-content:space-between;gap:8px;color:var(--muted);font-size:14px;margin-bottom:8px;flex-wrap:wrap}
+.bar{height:4px;background:var(--rule);border-radius:2px;overflow:hidden;margin-bottom:12px}
+.bar i{display:block;height:100%;background:var(--ink);transition:width .3s}
+.q{font-size:20px;font-weight:600;margin:4px 0 14px;line-height:1.45}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;border:1.5px solid var(--rule);background:var(--card);border-radius:10px;padding:12px 14px;font-size:17px}
+.opt:hover{border-color:var(--ink)}
+.opt.sel{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.actions .btn{flex:1;min-width:130px}
+.result{text-align:center}
+.score{font-family:var(--word);font-size:60px;font-weight:700;line-height:1}
+.rv{border-top:1px solid var(--rule);padding:11px 0}
+.rq{font-weight:600;display:flex;gap:10px;align-items:baseline}
+.rq .n{flex:0 0 26px;height:26px;border-radius:50%;display:inline-grid;place-items:center;font-size:13px;background:var(--rule)}
+.rv.good .n{background:var(--ok-bg);color:var(--ok)}
+.rv.bad .n{background:var(--bad-bg);color:var(--bad)}
+.ra{margin-left:36px;padding:2px 0}
+.ra.ok{color:var(--ok);font-weight:600}
+.ra.no{color:var(--bad)}
+.rex{margin:4px 0 0 36px;font-size:14px;color:var(--muted);background:var(--bg);border-radius:8px;padding:6px 10px}
+
+/* builder */
+.bgrid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:900px){.bgrid{grid-template-columns:minmax(0,1fr)}}
+.step{--c:var(--ink);background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:12px 14px;border-left:4px solid var(--c)}
+.step h3{margin:0 0 2px;font-family:var(--word);font-size:20px;color:var(--c)}
+.step .q2{font-size:13px;color:var(--muted);margin:0 0 6px}
+.field{margin-top:8px}
+.field .lab{font-size:13px;font-weight:600;margin-bottom:4px;display:block}
+.field .lab small{font-weight:400;color:var(--muted)}
+.picks{display:flex;flex-wrap:wrap;gap:6px}
+.pick{border:1.5px solid var(--rule);background:var(--card);border-radius:999px;padding:5px 11px;font-size:14px;text-align:left}
+.pick small{color:var(--muted);margin-left:4px}
+.pick[aria-pressed="true"]{border-color:var(--c);background:color-mix(in srgb,var(--c) 15%,var(--card));font-weight:600}
+.custom{border:1.5px solid var(--rule);background:var(--card);border-radius:8px;padding:6px 10px;font-size:14px;width:12em;max-width:100%}
+.talk{position:sticky;top:calc(64px + env(safe-area-inset-top,0px))}
+.talk h3{font-family:var(--word);font-size:22px;margin:0 0 6px}
+.talktext p{font-family:var(--word);font-size:18px;line-height:1.65;margin:0 0 10px}
+.talktext .s{border-radius:4px;transition:background .2s}
+.talktext .s.now{background:var(--hl);color:var(--hl-ink)}
+.talkvi p{font-size:14px;color:var(--muted);margin:0 0 8px}
+.talk textarea{width:100%;min-height:260px;border:1.5px solid var(--rule);border-radius:10px;background:var(--bg);padding:10px;font-family:var(--word);font-size:17px;line-height:1.55;color:var(--ink)}
+.ticks{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:14px;margin-top:8px}
+.tick{border:1.5px solid var(--rule);background:var(--card);border-radius:8px;padding:5px 10px;font-weight:600}
+.tick[aria-pressed="true"]{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
+.tipbox{background:color-mix(in srgb,var(--hl) 35%,var(--card));border-radius:10px;padding:10px 12px;font-size:14px;margin-bottom:12px}
+.tipbox b{font-family:var(--word);font-size:16px}
+
+/* hội thoại */
+.tl{display:flex;gap:10px;align-items:flex-start}
+.tl .who{flex:0 0 64px;font-size:12px;font-weight:700;color:var(--muted);padding-top:4px}
+.tl.A .t{font-family:var(--word);font-size:17px;flex:1;background:color-mix(in srgb,var(--ask) 10%,var(--card));border-radius:12px;padding:8px 12px}
+.tl.B .tb{flex:1;min-width:0;border-left:4px solid var(--rule);padding-left:10px}
+.tl.B.ok .tb{border-left-color:var(--ok)}
+.tl.B.no .tb{border-left-color:var(--bad)}
+.tvi{font-size:15px;margin-bottom:4px}
+.hintk{font-size:13px;background:color-mix(in srgb,var(--hl) 35%,var(--card));border-radius:8px;padding:4px 8px;margin-bottom:4px}
+.tb textarea,.send textarea{width:100%;border:1.5px solid var(--rule);border-radius:10px;background:var(--bg);padding:8px 10px;font-family:var(--word);font-size:16.5px;color:var(--ink);resize:vertical}
+.tb textarea:focus,.send textarea:focus{border-color:var(--ink);outline:none}
+.trres{font-size:14.5px;margin-top:6px;line-height:1.55}
+.tl.B.ok .trres{color:var(--ok)}
+.tl.B.no .trres{color:var(--bad)}
+.trres i{font-family:var(--word);font-size:16px;color:var(--ink)}
+.chat{max-width:820px}
+.mode{font-size:13px;font-weight:600;background:var(--bg);border-radius:999px;padding:3px 10px}
+.mode.ai{background:color-mix(in srgb,var(--ask) 15%,var(--card));color:var(--ask)}
+.note2{font-size:13.5px;background:color-mix(in srgb,var(--hl) 30%,var(--card));border-radius:8px;padding:6px 10px;margin-bottom:8px}
+.msgs{display:flex;flex-direction:column;gap:10px;max-height:58vh;overflow-y:auto;padding:6px 2px;margin-bottom:10px}
+.msg{display:flex;flex-direction:column;max-width:85%}
+.msg.bot{align-self:flex-start}
+.msg.me{align-self:flex-end;align-items:flex-end}
+.bub{border-radius:14px;padding:8px 12px;font-family:var(--word);font-size:17px;line-height:1.45}
+.msg.bot .bub{background:color-mix(in srgb,var(--ask) 12%,var(--card));border-top-left-radius:4px}
+.msg.me .bub{background:var(--ink);color:var(--card);border-top-right-radius:4px}
+.speak.sm{width:28px;height:28px;font-size:12px;vertical-align:middle}
+.fixbox{margin-top:4px;background:var(--bad-bg);color:var(--bad);border-radius:10px;padding:6px 10px;font-size:14px;display:grid;gap:3px;text-align:left}
+.fixbox b{color:var(--ok)}
+.fixbox span{display:block;color:var(--muted);font-size:12.5px}
+.fixbox .cor{color:var(--ok)}
+.fixbox .cor i{font-family:var(--word);font-size:15.5px}
+.okbox{margin-top:4px;font-size:13px;color:var(--ok);font-weight:600}
+.chips2{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:6px}
+.chip2{border:1px solid var(--rule);background:var(--card);border-radius:999px;padding:2px 9px;font-size:13px}
+.send{display:flex;gap:8px;align-items:flex-end}
+.send textarea{flex:1}
+.donebox{background:var(--ok-bg);color:var(--ok);border-radius:10px;padding:10px 12px;font-weight:600}
+.pnote{font-size:12.5px;color:var(--bad);margin-top:4px}
+.recbox{margin-top:14px;border-top:1px solid var(--rule);padding-top:12px;display:grid;gap:8px}
+.rechead{display:grid;gap:2px}
+.rectime{font-variant-numeric:tabular-nums;font-weight:700;color:var(--bad)}
+.btn.recon{background:var(--bad);border-color:var(--bad);color:var(--card)}
+.reclist{display:grid;gap:6px}
+.recitem{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:14px}
+.recitem audio{height:34px;max-width:100%}
+.sent-ok{color:var(--ok);font-weight:600}.sent-bad{color:var(--bad);font-weight:600}.sent-wait{color:var(--muted)}
+.tip{font-size:14px}
+/* submit */
+table{border-collapse:collapse;width:100%;font-size:15px}
+td,th{border-bottom:1px solid var(--rule);padding:8px 6px;text-align:left;vertical-align:top}
+td.n{font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap}
+a.btn{text-decoration:none;display:inline-block;text-align:center}
+a.btn.primary{color:var(--card)}
+a.btn.off{opacity:.4;pointer-events:none}
+#rtext{width:100%;margin-top:10px;border:1px solid var(--rule);border-radius:8px;background:var(--bg);padding:8px;font-size:13px;color:var(--ink);resize:vertical}
+.warn{color:var(--bad);font-weight:600}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Weather Mindmap</h1>
+    <p>Học cách nói về thời tiết hằng ngày theo sơ đồ: hỏi han, tả trời nắng, trời mưa, nói cảm xúc, khuyên nhau, kể rắc rối và nói về nơi em sống. Mỗi câu có từ vựng chính được gạch chân.</p>
+    <div class="goal">🎯 <b>Mục tiêu cuối bài:</b> em nói được khoảng 1 phút về thời tiết nơi em sống ở miền Nam Việt Nam, với hai mùa: <b>mùa khô</b> (tháng 12 – tháng 4) và <b>mùa mưa</b> (tháng 5 – tháng 11).</div>
+  </header>
+  <div class="topbar">
+    <label class="nm">Họ tên <input id="sname" placeholder="Nguyễn Văn A" autocomplete="name"></label>
+    <label class="vc">🔊 Giọng đọc <select id="voiceSel"><option>Đang tải giọng…</option></select></label>
+  </div>
+  <nav class="tabs" role="tablist" id="tabs">
+    <button role="tab" data-tab="map" aria-selected="true">🗺 Sơ đồ</button>
+    <button role="tab" data-tab="conv" aria-selected="false">💬 Hoàn thành hội thoại</button>
+    <button role="tab" data-tab="quiz" aria-selected="false">✅ Kiểm tra</button>
+    <button role="tab" data-tab="talk" aria-selected="false">🗣 Nói về nơi em sống</button>
+    <button role="tab" data-tab="send" aria-selected="false">📨 Nộp bài</button>
+  </nav>
+  <main id="main"></main>
+</div>
+<div class="sheet" id="sheet" hidden></div>
+
+<script>
+/* ===== CẤU HÌNH NHẬN ĐIỂM (Google Form của giáo viên) ===== */
+const SUBMIT={formUrl:"https://docs.google.com/forms/d/e/1FAIpQLSdQbX4Z0l4UpuoXiPftYNRTDNuvTymgIsZ2ssWfy0-xCZ1_mA/viewform",
+  entries:{name:"1195402447",quiz:"848946125",score:"1345236650",detail:"135001292"}};
+const LESSON="Weather mindmap (miền Nam VN)";
+/* Cổng AI Gemini (Apps Script "Weather Buddy AI", link /exec) và cổng nhận ghi âm (Apps Script "Nhận bài Speaking") */
+const AI_URL="";
+const SPEAK_URL="https://script.google.com/macros/s/AKfycbwnf8X3_Xfk9F_8HQtBwSFU_s28sRjxKb0aFaHCA4ybmMJvgaztBAbdvaFzITdbVXBt/exec";
+
+/* ===== DỮ LIỆU SƠ ĐỒ ===== */
+const BR=[
+ {id:"ask",en:"Asking & small talk",vi:"Hỏi & bắt chuyện",s:"Asking",e:"🙋",side:"L",why:"câu dùng để hỏi hoặc bắt chuyện về thời tiết",items:[
+  ["What's the weather like today?","weather","ˈweðə","thời tiết","Hôm nay thời tiết thế nào?","❓","It's hot and sunny.","Câu hỏi Wh- → xuống giọng ↘ ở cuối."],
+  ["Is it going to rain later?","going to rain","ˌɡəʊɪŋ tə ˈreɪn","sắp mưa","Lát nữa có mưa không?","🌥️","Maybe. Look at those clouds!","Câu hỏi Yes/No → lên giọng ↗ ở cuối."],
+  ["How hot is it today?","How hot","ˌhaʊ ˈhɒt","nóng cỡ nào","Hôm nay nóng cỡ nào?","🌡️","It's about 35 degrees."],
+  ["What's the forecast for tomorrow?","forecast","ˈfɔːkɑːst","dự báo thời tiết","Dự báo thời tiết ngày mai thế nào?","📱","More rain, I'm afraid."],
+  ["Hot today, isn't it?","isn't it","ˈɪznt ɪt","…nhỉ? (câu hỏi đuôi)","Hôm nay nóng nhỉ?","😅","I know! It's boiling.","Câu bắt chuyện rất hay dùng. Xuống giọng ↘ ở “isn't it” vì mình chờ người kia đồng ý.",{sort:false,alt:["isnt it","is not it"]}],
+  ["Lovely weather today!","Lovely","ˈlʌvli","đẹp, dễ chịu","Hôm nay trời đẹp quá!","🌤️","Yes, it's beautiful!"]
+ ]},
+ {id:"hot",en:"Hot, sunny days",vi:"Ngày nắng nóng (mùa khô)",s:"Hot days",e:"☀️",side:"R",why:"câu tả một ngày nắng nóng",items:[
+  ["It's boiling hot today!","boiling hot","ˌbɔɪlɪŋ ˈhɒt","nóng như đổ lửa","Hôm nay nóng như đổ lửa!","🔥","Tell me about it!"],
+  ["The sun is really strong.","strong","strɒŋ","gắt (nắng)","Nắng gắt thật.","😎"],
+  ["It's 36 degrees!","degrees","dɪˈɡriːz","độ (nhiệt độ)","36 độ luôn!","🌡️"],
+  ["There isn't a cloud in the sky.","cloud","klaʊd","đám mây","Trời không một gợn mây.","🌞"],
+  ["It's so dry and dusty.","dusty","ˈdʌsti","nhiều bụi","Trời khô và bụi quá.","💨"],
+  ["It's too hot to go out.","too hot","ˌtuː ˈhɒt","nóng quá (đến mức không…)","Nóng quá, không ra ngoài nổi.","🏠",null,"Cấu trúc too + tính từ + to V: quá… đến nỗi không thể…"],
+  ["We're having a heatwave.","heatwave","ˈhiːtweɪv","đợt nắng nóng","Đang có đợt nắng nóng.","🥵",null,null,{alt:["heat wave"]}]
+ ]},
+ {id:"rain",en:"Rainy days",vi:"Ngày mưa (mùa mưa)",s:"Rainy days",e:"🌧️",side:"L",why:"câu tả trời mưa",items:[
+  ["Look at those dark clouds. It's going to rain.","dark clouds","ˌdɑːk ˈklaʊdz","mây đen","Nhìn mấy đám mây đen kìa. Trời sắp mưa rồi.","🌥️",null,"Thấy dấu hiệu trước mắt → dùng be going to."],
+  ["It's pouring!","pouring","ˈpɔːrɪŋ","mưa như trút","Mưa như trút nước!","🪣"],
+  ["It's just a light shower.","shower","ˈʃaʊə","cơn mưa rào ngắn","Chỉ là mưa rào nhẹ thôi.","🌦️","Good. It'll stop soon."],
+  ["There's a thunderstorm coming.","thunderstorm","ˈθʌndəstɔːm","cơn giông","Sắp có giông.","⛈️"],
+  ["Did you hear that thunder?","thunder","ˈθʌndə","sấm","Bạn có nghe tiếng sấm không?","🔊","Yes! It was so loud."],
+  ["It's so humid today.","humid","ˈhjuːmɪd","oi, ẩm","Hôm nay oi quá.","💧",null,"Hay nói trước cơn mưa, khi không khí nóng và ẩm.",{sort:false}],
+  ["The rain has stopped.","stopped","stɒpt","tạnh, ngừng","Mưa tạnh rồi.","🌈","Great! Let's go."]
+ ]},
+ {id:"feel",en:"How I feel",vi:"Nói cảm xúc",s:"Feelings",e:"😓",side:"R",why:"câu nói cảm giác của mình",items:[
+  ["I'm so sweaty!","sweaty","ˈsweti","đổ mồ hôi","Mình đổ mồ hôi đầm đìa!","💦"],
+  ["I'm dying for a cold drink.","dying for","ˈdaɪɪŋ fə","thèm… muốn chết","Mình thèm một ly nước lạnh muốn chết.","🥤",null,"Cách nói thân mật: be dying for + danh từ = rất muốn có."],
+  ["This heat makes me feel lazy.","makes me feel","ˌmeɪks mi ˈfiːl","làm mình thấy","Cái nóng này làm mình thấy lười.","🦥",null,"make + người + feel + tính từ."],
+  ["I'm soaked!","soaked","səʊkt","ướt sũng","Mình ướt sũng rồi!","🫠","Oh no! Here's a towel."],
+  ["I feel so cosy when it rains.","cosy","ˈkəʊzi","ấm cúng","Trời mưa mình thấy ấm cúng ghê.","🛋️",null,null,{alt:["cozy"]}],
+  ["I'm scared of thunder.","scared of","ˈskeəd əv","sợ","Mình sợ sấm.","😨"],
+  ["I love the cool breeze after the rain.","cool breeze","ˌkuːl ˈbriːz","làn gió mát","Mình thích làn gió mát sau cơn mưa.","🍃"]
+ ]},
+ {id:"adv",en:"Advice & plans",vi:"Khuyên & rủ rê",s:"Advice",e:"💡",side:"L",why:"câu khuyên hoặc rủ ai làm gì",items:[
+  ["Don't forget your raincoat!","raincoat","ˈreɪnkəʊt","áo mưa","Đừng quên áo mưa nhé!","🧥","Thanks for reminding me."],
+  ["Take an umbrella, just in case.","just in case","ˌdʒʌst ɪn ˈkeɪs","phòng khi","Mang ô theo phòng khi mưa.","☂️"],
+  ["Put on some sunscreen.","sunscreen","ˈsʌnskriːn","kem chống nắng","Thoa chút kem chống nắng đi.","🧴"],
+  ["Let's wait for the rain to stop.","wait for","ˈweɪt fə","chờ","Mình chờ mưa tạnh đi.","⏳","OK. Let's have a drink here."],
+  ["Let's stay indoors until it cools down.","cools down","ˌkuːlz ˈdaʊn","dịu mát lại","Ở trong nhà đến khi trời dịu bớt nhé.","🏠"],
+  ["Drink lots of water.","lots of water","ˌlɒts əv ˈwɔːtə","thật nhiều nước","Uống thật nhiều nước vào.","💧"],
+  ["Let's get some iced tea.","iced tea","ˌaɪst ˈtiː","trà đá","Đi uống trà đá đi.","🧊","Good idea!"]
+ ]},
+ {id:"prob",en:"Weather problems",vi:"Kể rắc rối do thời tiết",s:"Problems",e:"⚠️",side:"R",why:"câu kể rắc rối do thời tiết gây ra",items:[
+  ["The streets are flooded again.","flooded","ˈflʌdɪd","ngập","Đường lại ngập nữa rồi.","🌊"],
+  ["There's a huge traffic jam.","traffic jam","ˈtræfɪk dʒæm","kẹt xe","Kẹt xe khủng khiếp.","🛵"],
+  ["Sorry, I'm late. I got stuck in the rain.","stuck in the rain","ˌstʌk ɪn ðə ˈreɪn","bị mắc mưa","Xin lỗi em đến trễ. Em bị mắc mưa.","⏰","No problem. Come in and dry off."],
+  ["There's a power cut.","power cut","ˈpaʊə kʌt","cúp điện","Cúp điện rồi.","🔌"],
+  ["My motorbike broke down in the flood.","broke down","ˌbrəʊk ˈdaʊn","chết máy, hỏng","Xe máy của mình chết máy trong nước ngập.","🔧"],
+  ["My clothes won't dry.","won't dry","ˌwəʊnt ˈdraɪ","không chịu khô","Quần áo phơi mãi không khô.","👕",null,null,{alt:["wont dry","will not dry"]}],
+  ["I got sunburnt at the beach.","sunburnt","ˈsʌnbɜːnt","cháy nắng","Mình bị cháy nắng ở biển.","🦞",null,null,{sort:false,alt:["sunburned"]}]
+ ]}
+];
+BR.forEach(b=>{b.items=b.items.map(a=>Object.assign({w:a[0],k:a[1],kipa:a[2],kvi:a[3],vi:a[4],e:a[5],re:a[6]||"",note:a[7]||""},a[8]||{}))});
+const DIALOG=[["A","ask","Hot today, isn't it?"],["B","feel","I know! I'm so sweaty."],["A","adv","Let's get some iced tea."],["B","rain","Good idea. But look at those dark clouds. It's going to rain."],["A","adv","Take an umbrella, just in case!"]];
+const BYID=Object.fromEntries(BR.map(b=>[b.id,b]));
+const MONTHS=["J","F","M","A","M","J","J","A","S","O","N","D"];
+const DRYM=[0,1,2,3,11];
+
+/* ===== HELPERS ===== */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const store={get(k,d){try{const v=localStorage.getItem("wx:"+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem("wx:"+k,JSON.stringify(v))}catch(e){}}};
+const norm=s=>String(s).toLowerCase().replace(/[’']/g,"").replace(/[.,!?;:…]/g,"").replace(/\s+/g," ").trim();
+const cvar=id=>`var(--${id})`;
+
+/* ===== GIỌNG ĐỌC ===== */
+let ALLV=[],VOICE=null;
+function vScore(v){let s=0;const n=v.name;
+  if(/Natural|Neural|Online/i.test(n))s+=60;if(/Premium|Enhanced/i.test(n))s+=45;if(/Google UK English/i.test(n))s+=30;
+  if(/Sonia|Libby|Maisie|Ryan|Thomas|Serena|Daniel|Kate|Arthur|Martha|Stephanie/i.test(n))s+=20;
+  if(v.lang==="en-GB")s+=15;else if(/^en[-_](US|AU|IE|NZ|CA)/i.test(v.lang))s+=6;
+  if(/compact|espeak|Zarvox|Bad News|Bells|Trinoids|Whisper|Albert|Bubbles|Cellos|Jester|Organ|Superstar|Boing|Wobble|Junior|Ralph|Kathy|Grandma|Grandpa|Rocko|Shelley|Sandy|Flo|Eddy|Reed/i.test(n))s-=80;return s}
+function loadVoices(){
+  try{ALLV=speechSynthesis.getVoices().filter(v=>/^en/i.test(v.lang)).sort((a,b)=>vScore(b)-vScore(a))}catch(e){ALLV=[]}
+  const saved=store.get("voice","");VOICE=ALLV.find(v=>v.name===saved)||ALLV[0]||null;
+  const sel=$("#voiceSel");
+  sel.innerHTML=ALLV.length?ALLV.map(v=>`<option value="${esc(v.name)}" ${v===VOICE?"selected":""}>${esc(v.name.replace(/Microsoft |Online |\(Natural\) - /g,"").slice(0,44))}</option>`).join(""):`<option>Không có giọng tiếng Anh (hãy mở bằng Edge/Chrome/Safari)</option>`;
+}
+try{loadVoices();speechSynthesis.onvoiceschanged=loadVoices}catch(e){}
+$("#voiceSel").onchange=e=>{VOICE=ALLV.find(v=>v.name===e.target.value)||VOICE;store.set("voice",VOICE&&VOICE.name);say("It's hot and sunny today, but it's going to rain this afternoon.")};
+function say(t,opt={}){
+  try{speechSynthesis.cancel()}catch(e){}
+  const clean=String(t).replace(/[↗↘]|\(.*?\)/g,"").replace(/…/g,".");
+  setTimeout(()=>{try{const u=new SpeechSynthesisUtterance(clean);u.lang="en-GB";u.rate=opt.slow?.7:.92;if(VOICE){u.voice=VOICE;u.lang=VOICE.lang}
+    u.onend=()=>opt.onend&&opt.onend();u.onerror=()=>opt.onend&&opt.onend();speechSynthesis.speak(u)}catch(e){opt.onend&&opt.onend()}},40);
+}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-say]");if(b){e.stopPropagation();say(b.dataset.say,{slow:!!b.dataset.slow})}});
+
+/* ===== HỌC SINH ===== */
+let ST={name:store.get("name","")};
+$("#sname").value=ST.name;$("#sname").oninput=e=>{ST.name=e.target.value;store.set("name",ST.name)};
+const RES=store.get("res2",{});
+function saveRes(){store.set("res2",RES)}
+
+/* ===== TABS ===== */
+let tab="map";
+const TABS=["map","conv","quiz","talk","send"];
+$("#tabs").addEventListener("click",e=>{const b=e.target.closest("[data-tab]");if(b)go(b.dataset.tab)});
+function go(t){tab=t;document.querySelectorAll("#tabs button").forEach(x=>x.setAttribute("aria-selected",x.dataset.tab===t));
+  try{speechSynthesis.cancel()}catch(e){}closeSheet();
+  ({map:drawMap,conv:drawConv,quiz:startQuiz,talk:drawTalk,send:drawSend})[t]();
+  try{history.replaceState(null,"","#"+t)}catch(e){}}
+
+/* ===== VÒNG 12 THÁNG ===== */
+function dialSVG(){
+  const cx=100,cy=100,ro=92,ri=62,out=[];
+  const pt=(r,a)=>[cx+r*Math.cos(a),cy+r*Math.sin(a)];
+  for(let i=0;i<12;i++){
+    const a0=(i*30-90-15+1)*Math.PI/180,a1=(i*30-90+15-1)*Math.PI/180;
+    const [x0,y0]=pt(ro,a0),[x1,y1]=pt(ro,a1),[x2,y2]=pt(ri,a1),[x3,y3]=pt(ri,a0);
+    const c=DRYM.includes(i)?"dry":"rainy";
+    out.push(`<path d="M${x0.toFixed(1)} ${y0.toFixed(1)} A${ro} ${ro} 0 0 1 ${x1.toFixed(1)} ${y1.toFixed(1)} L${x2.toFixed(1)} ${y2.toFixed(1)} A${ri} ${ri} 0 0 0 ${x3.toFixed(1)} ${y3.toFixed(1)}Z" style="fill:var(--${c})"/>`);
+    const [tx,ty]=pt((ro+ri)/2,(i*30-90)*Math.PI/180);
+    out.push(`<text x="${tx.toFixed(1)}" y="${(ty+5).toFixed(1)}" text-anchor="middle" font-size="14" style="fill:var(--onseg)">${MONTHS[i]}</text>`);
+  }
+  out.push(`<text x="100" y="96" text-anchor="middle" font-size="30">☀️</text><text x="100" y="128" text-anchor="middle" font-size="30">🌧️</text>`);
+  return `<svg class="dial" viewBox="0 0 200 200" role="img" aria-label="Vòng 12 tháng: mùa khô tháng 12 đến tháng 4, mùa mưa tháng 5 đến tháng 11">${out.join("")}</svg>`;
+}
+
+/* ===== SƠ ĐỒ CHIA NHÁNH ===== */
+const MM={zoom:null,filter:"all",col:new Set(),W:0,H:0,vert:false};
+function centerHTML(){
+  return `<div class="mn center" id="mncenter"><div class="ct">Weather</div><div class="cs">in the south of Vietnam</div>${dialSVG()}
+   <div class="seasons"><span><i style="background:var(--dry)"></i>Dry: Dec – Apr</span><span><i style="background:var(--rainy)"></i>Rainy: May – Nov</span></div></div>`;
+}
+function branchHTML(b){
+  const c=MM.col.has(b.id);
+  return `<button class="mn br" data-b="${b.id}" style="--c:var(--${b.id})" aria-expanded="${!c}" title="Bấm để ${c?"mở":"thu gọn"} nhánh"><span class="be" aria-hidden="true">${b.e}</span><span class="bt"><span class="ben">${esc(b.en)}</span><span class="bvi">${esc(b.vi)}</span></span>${c?`<span class="bplus">+${b.items.length}</span>`:""}</button>`;
+}
+function renderMind(host,leafFn,{focus=false}={}){
+  const vis=BR.filter(b=>!focus||MM.filter==="all"||b.id===MM.filter);
+  host.innerHTML=`<div class="mmtools">
+     ${focus?`<div class="focus"><span class="fl">Học từng nhánh:</span><button class="fchip" data-f="all" aria-pressed="${MM.filter==="all"}">Cả sơ đồ</button>${BR.map(b=>`<button class="fchip" data-f="${b.id}" style="--c:var(--${b.id})" aria-pressed="${MM.filter===b.id}">${b.e} ${esc(b.en)}</button>`).join("")}</div>`:""}
+     <div class="zoom" role="group" aria-label="Phóng to thu nhỏ"><button data-z="-" aria-label="Thu nhỏ">−</button><span id="zv">100%</span><button data-z="+" aria-label="Phóng to">+</button><button data-z="fit" style="font-size:12px;font-weight:600">Vừa khung</button></div></div>
+   <div class="mmview" id="mmview"><div class="mmsizer" id="mmsizer"><div class="mmstage" id="mmstage"><svg class="mmsvg" id="mmsvg" aria-hidden="true"></svg>${centerHTML()}
+   ${vis.map(b=>branchHTML(b)+b.items.map((it,i)=>leafFn(b,it,i)).join("")).join("")}</div></div></div>`;
+  host.querySelectorAll(".mn.br").forEach(n=>n.onclick=()=>{const id=n.dataset.b;MM.col.has(id)?MM.col.delete(id):MM.col.add(id);n.outerHTML=branchHTML(BYID[id]);bindBranches(host);layoutMind()});
+  bindBranches(host);
+  host.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>{MM.filter=b.dataset.f;MM.zoom=null;drawMap()});
+  host.querySelectorAll("[data-z]").forEach(b=>b.onclick=()=>{const z=curZoom();MM.zoom=b.dataset.z==="fit"?null:Math.min(1.6,Math.max(.35,z+(b.dataset.z==="+"?.1:-.1)));applyZoom()});
+  layoutMind();
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>layoutMind());
+}
+function bindBranches(host){host.querySelectorAll(".mn.br").forEach(n=>n.onclick=()=>{const id=n.dataset.b;MM.col.has(id)?MM.col.delete(id):MM.col.add(id);n.outerHTML=branchHTML(BYID[id]);bindBranches(host);layoutMind()})}
+const place=(el,x,y)=>{el.style.left=Math.round(x)+"px";el.style.top=Math.round(y)+"px"};
+function taper(p0,c1,c2,p3,w0,w1,id){
+  const nrm=(a,b)=>{let dx=b[0]-a[0],dy=b[1]-a[1];const l=Math.hypot(dx,dy)||1;return [-dy/l,dx/l]};
+  const n0=nrm(p0,(c1[0]===p0[0]&&c1[1]===p0[1])?c2:c1),n3=nrm(c2,p3);
+  const o=(p,n,w,s)=>`${(p[0]+s*n[0]*w).toFixed(1)} ${(p[1]+s*n[1]*w).toFixed(1)}`;
+  return `<path class="tp" style="fill:var(--${id})" d="M${o(p0,n0,w0,1)} C${o(c1,n0,w0,1)} ${o(c2,n3,w1,1)} ${o(p3,n3,w1,1)} L${o(p3,n3,w1,-1)} C${o(c2,n3,w1,-1)} ${o(c1,n0,w0,-1)} ${o(p0,n0,w0,-1)}Z"/>`;
+}
+function link(a,b,id){const mx=(a[0]+b[0])/2;return `<path class="lk" style="stroke:var(--${id})" d="M${a[0]} ${a[1]} C${mx} ${a[1]} ${mx} ${b[1]} ${b[0]} ${b[1]}"/>`}
+function layoutMind(){
+  const st=$("#mmstage"),view=$("#mmview");if(!st||!view)return;
+  const vertical=view.clientWidth<760;MM.vert=vertical;st.classList.toggle("vert",vertical);
+  st.style.width="4000px";st.querySelectorAll(".mn").forEach(n=>{n.style.left="0px";n.style.top="0px"});
+  const C=$("#mncenter"),cw=C.offsetWidth,ch=C.offsetHeight;
+  const info=[...st.querySelectorAll(".mn.br")].map(n=>{const id=n.dataset.b,closed=MM.col.has(id);
+    const all=[...st.querySelectorAll(`.mn.lf[data-b="${id}"]`)];all.forEach(l=>l.hidden=closed);
+    return {id,n,b:BYID[id],leaves:closed?[]:all}});
+  const GL=vertical?5:5,GB=vertical?22:26,PAD=vertical?12:30,D1=86,D2=vertical?26:54;
+  info.forEach(x=>{x.leaves.forEach(l=>l.classList.remove("L"));x.bs={w:x.n.offsetWidth,h:x.n.offsetHeight};x.ls=x.leaves.map(l=>({w:l.offsetWidth,h:l.offsetHeight}));
+    x.lh=x.ls.reduce((a,s)=>a+s.h,0)+GL*Math.max(0,x.ls.length-1);x.bh=Math.max(x.bs.h,x.lh)});
+  const paths=[];let W,H;
+  if(!vertical){
+    const single=info.length===1,sides={L:[],R:[]};info.forEach(x=>sides[single?"R":x.b.side].push(x));
+    const S=k=>{const a=sides[k];return {a,h:a.reduce((s,x)=>s+x.bh,0)+GB*Math.max(0,a.length-1),bw:Math.max(0,...a.map(x=>x.bs.w)),lw:Math.max(0,...a.flatMap(x=>x.ls.map(s=>s.w)))}};
+    const L=S("L"),R=S("R"),ext=s=>s.a.length?D1+s.bw+D2+s.lw:0;
+    W=PAD*2+ext(L)+cw+ext(R);H=PAD*2+Math.max(L.h,R.h,ch);
+    const cx=PAD+ext(L)+cw/2,cy=H/2;place(C,cx-cw/2,cy-ch/2);
+    [["L",L,-1],["R",R,1]].forEach(([k,s,dir])=>{
+      let y=cy-s.h/2;
+      s.a.forEach(x=>{
+        const by=y+x.bh/2,near=cx+dir*(cw/2+D1),bx=dir>0?near:near-x.bs.w;place(x.n,bx,by-x.bs.h/2);
+        const p0=[cx+dir*(cw/2-16),cy],p3=[near,by];
+        paths.push(taper(p0,[p0[0]+dir*D1*.75,p0[1]],[p3[0]-dir*D1*.6,p3[1]],p3,9,2.4,x.id));
+        const far=dir>0?bx+x.bs.w:bx,lx0=cx+dir*(cw/2+D1+s.bw+D2);let ly=by-x.lh/2;
+        x.leaves.forEach((el,j)=>{const z=x.ls[j],lx=dir>0?lx0:lx0-z.w;if(dir<0)el.classList.add("L");place(el,lx,ly);
+          paths.push(link([far,by],[dir>0?lx:lx+z.w,ly+z.h-1],x.id));ly+=z.h+GL});
+        y+=x.bh+GB;
+      });
+    });
+  }else{
+    const IND=30,bw=Math.max(0,...info.map(x=>x.bs.w)),lw=Math.max(0,...info.flatMap(x=>x.ls.map(s=>s.w)));
+    W=Math.max(cw+PAD*2,PAD*2+IND+bw+D2+lw);place(C,PAD,PAD);
+    const sx=PAD+16,sy=PAD+ch-10;let y=PAD+ch+24,lastBy=sy;
+    info.forEach(x=>{
+      const by=y+x.bh/2;place(x.n,PAD+IND,by-x.bs.h/2);
+      paths.push(link([sx,by-16],[PAD+IND+2,by],x.id).replace('class="lk"','class="lk" stroke-width="4"'));lastBy=by-16;
+      const far=PAD+IND+x.bs.w,lx=PAD+IND+bw+D2;let ly=by-x.lh/2;
+      x.leaves.forEach((el,j)=>{const z=x.ls[j];place(el,lx,ly);paths.push(link([far,by],[lx,ly+z.h-1],x.id));ly+=z.h+GL});
+      y+=x.bh+GB;
+    });
+    H=y-GB+PAD;
+    paths.unshift(`<path class="lk" style="stroke:var(--ink)" stroke-width="5" d="M${sx} ${sy} L${sx} ${lastBy}"/>`);
+  }
+  st.style.width=W+"px";st.style.height=H+"px";
+  const svg=$("#mmsvg");svg.setAttribute("width",W);svg.setAttribute("height",H);svg.setAttribute("viewBox",`0 0 ${W} ${H}`);svg.innerHTML=paths.join("");
+  MM.W=W;MM.H=H;applyZoom();
+}
+function fitZoom(){const v=$("#mmview");return v?Math.min(1,(v.clientWidth-2)/MM.W):1}
+function curZoom(){return MM.zoom==null?Math.max(MM.vert?.5:.55,fitZoom()):MM.zoom}
+function applyZoom(){
+  const st=$("#mmstage"),sz=$("#mmsizer");if(!st)return;const z=curZoom();
+  st.style.transform=`scale(${z})`;sz.style.width=MM.W*z+"px";sz.style.height=MM.H*z+"px";
+  const zv=$("#zv");if(zv)zv.textContent=Math.round(z*100)+"%";
+}
+let RZT=null;window.addEventListener("resize",()=>{clearTimeout(RZT);RZT=setTimeout(layoutMind,150)});
+
+/* ----- Tab 1: Sơ đồ ----- */
+let showVi=store.get("showvi",false),VIEW=store.get("view","sent");
+function hl(it){const w=it.w,i=w.toLowerCase().indexOf(it.k.toLowerCase());if(i<0)return esc(w);
+  return esc(w.slice(0,i))+`<b class="kv">${esc(w.slice(i,i+it.k.length))}</b>`+esc(w.slice(i+it.k.length))}
+function drawMap(){
+  $("#main").innerHTML=`<p class="hint">Mỗi nhánh là một tình huống nói chuyện hằng ngày. Mỗi lá là một câu nói thật, từ vựng chính được gạch chân. Bấm vào câu để nghe, xem nghĩa, phiên âm từ vựng và cách trả lời. Bấm tên nhánh để thu gọn hoặc mở ra.</p>
+   <div class="row" style="margin-bottom:8px;gap:12px">
+     <div class="seg2" role="group" aria-label="Kiểu hiển thị"><button data-v="sent" aria-pressed="${VIEW==="sent"}">🗣 Câu nói hằng ngày</button><button data-v="key" aria-pressed="${VIEW==="key"}">🔤 Chỉ từ vựng</button></div>
+     <label style="font-size:14px;display:inline-flex;gap:6px"><input type="checkbox" id="vi" ${showVi?"checked":""}> Hiện nghĩa tiếng Việt</label></div>
+   <div id="mindhost" class="${showVi?"showvi":""}"></div>
+   <div class="card dlg"><div class="row" style="justify-content:space-between"><b>Ghép các nhánh thành một cuộc nói chuyện</b><button class="btn" id="dplay" style="padding:6px 12px">🔊 Nghe cả đoạn</button></div>
+   ${DIALOG.map(([who,b,t],i)=>`<div class="dl" style="--c:var(--${b})" data-dl="${i}"><span class="who">${who}</span><span class="tag">${BYID[b].e} ${esc(BYID[b].s)}</span><span class="t">${esc(t)}</span><button class="speak" data-say="${esc(t)}" aria-label="Nghe">🔊</button></div>`).join("")}</div>`;
+  $("#vi").onchange=e=>{showVi=e.target.checked;store.set("showvi",showVi);$("#mindhost").classList.toggle("showvi",showVi);layoutMind()};
+  document.querySelectorAll("[data-v]").forEach(b=>b.onclick=()=>{VIEW=b.dataset.v;store.set("view",VIEW);drawMap()});
+  $("#dplay").onclick=()=>{let i=0;const nx=()=>{document.querySelectorAll(".dl.now").forEach(x=>x.classList.remove("now"));if(i>=DIALOG.length||tab!=="map")return;const el=document.querySelector(`[data-dl="${i}"]`);el&&el.classList.add("now");say(DIALOG[i++][2],{onend:()=>setTimeout(nx,350)})};nx()};
+  renderMind($("#mindhost"),(b,it,i)=>VIEW==="key"
+    ?`<button class="mn lf" data-b="${b.id}" data-i="${i}" style="--c:var(--${b.id})"><span class="le" aria-hidden="true">${it.e}</span><span class="lw">${esc(it.k)}</span><span class="lv">${esc(it.kvi)}</span></button>`
+    :`<button class="mn lf sent" data-b="${b.id}" data-i="${i}" style="--c:var(--${b.id})"><span class="le" aria-hidden="true">${it.e}</span><span class="lw">${hl(it)}</span><span class="lv">${esc(it.vi)}</span></button>`,{focus:true});
+  document.querySelectorAll("#mindhost .mn.lf").forEach(l=>l.onclick=()=>openSheet(l.dataset.b,+l.dataset.i));
+}
+function openSheet(bid,i){
+  const b=BYID[bid],it=b.items[i],sh=$("#sheet");
+  sh.innerHTML=`<div class="in" style="--c:var(--${bid})" role="dialog" aria-label="${esc(it.w)}"><button class="x" aria-label="Đóng">×</button>
+   <div class="sbr">${b.e} ${esc(b.en)} · ${esc(b.vi)}</div>
+   <div class="sw">${it.e} ${hl(it)}</div>
+   <div class="row" style="margin-top:6px"><button class="speak" data-say="${esc(it.w)}" aria-label="Nghe">🔊</button><button class="speak" data-say="${esc(it.w)}" data-slow="1" aria-label="Nghe chậm">🐢</button><span class="svi">${esc(it.vi)}</span></div>
+   <div class="kvrow"><span class="kl">Từ vựng</span><b>${esc(it.k)}</b><span class="ipa">/${esc(it.kipa)}/</span><button class="speak" data-say="${esc(it.k)}" aria-label="Nghe từ">🔊</button><span>${esc(it.kvi)}</span></div>
+   ${it.note?`<div class="snote">💡 ${esc(it.note)}</div>`:""}
+   ${it.re?`<div class="reply"><span class="kl">Người kia đáp</span><i>${esc(it.re)}</i><button class="speak" data-say="${esc(it.re)}" aria-label="Nghe câu đáp">🔊</button></div>`:""}</div>`;
+  sh.hidden=false;sh.querySelector(".x").onclick=closeSheet;say(it.w);
+}
+function closeSheet(){$("#sheet").hidden=true}
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeSheet()});
+
+/* ----- Review chung ----- */
+function reviewHTML(title,sc,rows){
+  const p=sc/rows.length,msg=p>=.9?"Rất tốt! Em nhớ sơ đồ rất chắc.":p>=.6?"Khá ổn. Xem lại phần sửa bên dưới nhé.":"Cần ôn thêm. Mở tab Sơ đồ, nghe lại từng nhánh rồi làm bộ khác.";
+  return `<div class="card" style="margin-top:16px"><div class="result"><div class="score">${sc}/${rows.length}</div><p>${esc(title)}: ${msg}</p></div>
+   ${rows.map((r,i)=>`<div class="rv ${r.ok?"good":"bad"}"><div class="rq"><span class="n">${i+1}</span><span>${r.q}</span></div>
+    ${r.ok?`<div class="ra ok">✓ ${esc(r.ans)}</div>`:`<div class="ra no">✗ <s>${esc(r.c)}</s></div><div class="ra ok">✓ ${esc(r.ans)}</div>`}
+    ${(!r.ok&&r.ex)?`<div class="rex">${r.ex}</div>`:""}</div>`).join("")}
+   <div class="actions"><button class="btn" onclick="go('send')">Đến phần Nộp bài</button></div></div>`;
+}
+
+/* ----- Tab 2: Hoàn thành hội thoại ----- */
+let CONV=store.get("convSub","t1");
+const EXP=[["it's","it is"],["i'm","i am"],["don't","do not"],["i'll","i will"],["there's","there is"],["let's","let us"],["what's","what is"],["isn't","is not"],["won't","will not"],["can't","cannot"],["that's","that is"],["it'll","it will"],["you're","you are"],["we're","we are"],["gonna","going to"],["cozy","cosy"]];
+const nrm=s=>{let t=" "+String(s).toLowerCase().replace(/[’‘`]/g,"'").replace(/[.,!?;:"“”…()]/g," ").replace(/\s+/g," ").trim()+" ";EXP.forEach(([a,b])=>{t=t.split(" "+a+" ").join(" "+b+" ")});return t.replace(/'/g,"")};
+const TR=[
+ {a:"Hi Mai! Hot today, isn't it?",vi:"Ừ! Nóng như đổ lửa luôn. Mình đổ mồ hôi đầm đìa.",m:"I know! It's boiling hot. I'm so sweaty.",keys:[["boiling hot","boiling"],["sweaty"]]},
+ {a:"Do you want to go to the park after school?",vi:"Nhưng nhìn mấy đám mây đen kìa. Trời sắp mưa rồi.",m:"But look at those dark clouds. It's going to rain.",keys:[["dark clouds","black clouds"],["going to rain","will rain"]]},
+ {a:"Oh no. What's the forecast for this afternoon?",vi:"Dự báo nói sẽ có giông vào cuối buổi chiều.",m:"The forecast says there's going to be a thunderstorm in the late afternoon.",keys:[["forecast"],["thunderstorm","storm"],["late afternoon"]]},
+ {a:"Then let's get some iced tea near school instead.",vi:"Ý hay đó! Mình đang thèm trà đá muốn chết.",m:"Good idea! I'm dying for some iced tea.",keys:[["good idea","great idea","nice idea"],["dying for"],["iced tea","ice tea"]]},
+ {a:"Don't forget your raincoat.",vi:"Cảm ơn nhé. Mình cũng sẽ mang ô theo, phòng khi mưa.",m:"Thanks. I'll take an umbrella too, just in case.",keys:[["thank"],["umbrella"],["just in case"]]},
+ {a:"Last week I got stuck in the rain and I was soaked.",vi:"Tội bạn quá! Đường ở đây hay bị ngập lắm.",m:"Poor you! The streets here often get flooded.",keys:[["poor you","oh no","so sorry","sorry to hear"],["street","road"],["flooded","flood"]]},
+ {a:"Is your house OK when it rains heavily?",vi:"Thỉnh thoảng bị cúp điện, nhưng mình thấy ấm cúng khi trời mưa.",m:"Sometimes there's a power cut, but I feel cosy when it rains.",keys:[["power cut","power outage","blackout"],["cosy"],["when it rains","when it is raining"]]},
+ {a:"Me too! I love the cool breeze after the rain.",vi:"Đi thôi, trước khi trời mưa như trút nước!",m:"Let's go before it starts pouring!",keys:[["let us go","lets go"],["before"],["pour"]]}
+];
+let TRS=store.get("trans",{ans:TR.map(()=>""),done:false});
+const KVI={"boiling hot":"nóng như đổ lửa","sweaty":"đổ mồ hôi","dark clouds":"mây đen","going to rain":"sắp mưa","forecast":"dự báo","thunderstorm":"cơn giông","late afternoon":"cuối buổi chiều","good idea":"ý hay","dying for":"thèm… muốn chết","iced tea":"trà đá","thank":"cảm ơn","umbrella":"cái ô","just in case":"phòng khi","poor you":"tội bạn quá","street":"đường phố","flooded":"bị ngập","power cut":"cúp điện","cosy":"ấm cúng","when it rains":"khi trời mưa","let us go":"đi thôi (let's go)","before":"trước khi","pour":"mưa như trút (pouring)"};
+function checkTr(t,a){const s=nrm(a);const miss=t.keys.filter(alts=>!alts.some(x=>s.includes(nrm(x).trim())));return {ok:a.trim().length>0&&miss.length===0,miss:miss.map(m=>m[0])}}
+function drawConv(){
+  $("#main").innerHTML=`<div class="seg2" role="group" aria-label="Chọn hội thoại" style="margin-bottom:12px"><button data-cv="t1" aria-pressed="${CONV==="t1"}">💬 Hội thoại 1: Dịch câu</button><button data-cv="t2" aria-pressed="${CONV==="t2"}">🤖 Hội thoại 2: Chat với AI</button></div><div id="convbox"></div>`;
+  document.querySelectorAll("[data-cv]").forEach(b=>b.onclick=()=>{CONV=b.dataset.cv;store.set("convSub",CONV);drawConv()});
+  CONV==="t1"?drawTrans():drawChat();
+}
+function drawTrans(){
+  const box=$("#convbox"),R=TRS.done?TR.map((t,i)=>checkTr(t,TRS.ans[i])):null;
+  box.innerHTML=`<p class="hint">Nam (A) rủ Mai (B) đi chơi sau giờ học. Em đóng vai <b>Mai</b>: dịch câu tiếng Việt sang tiếng Anh, dùng từ vựng trên sơ đồ. Có thể bấm 💡 để xem từ khóa cần dùng.</p>
+  <div class="card" style="max-width:820px;display:grid;gap:12px">${TR.map((t,i)=>`
+    <div class="tl A"><span class="who">A · Nam</span><span class="t">${esc(t.a)}</span><button class="speak" data-say="${esc(t.a)}" aria-label="Nghe">🔊</button></div>
+    <div class="tl B ${R?(R[i].ok?"ok":"no"):""}"><span class="who">B · Mai</span><div class="tb"><div class="tvi">🇻🇳 ${esc(t.vi)} <button class="linkbtn" data-hint="${i}">💡 Gợi ý</button></div>
+      <div class="hintk" id="hk${i}" hidden>Từ khóa: ${t.keys.map(k=>`<b>${esc(k[0]==="let us go"?"let's go":k[0])}</b> (${esc(KVI[k[0]]||"")})`).join(" · ")}</div>
+      <textarea id="tr${i}" rows="2" ${TRS.done?"disabled":""} placeholder="Gõ câu tiếng Anh…" aria-label="Dịch câu ${i+1}">${esc(TRS.ans[i])}</textarea>
+      ${R?`<div class="trres">${R[i].ok?`✓ Đúng rồi! Câu mẫu: <i>${esc(t.m)}</i>`:`✗ ${TRS.ans[i].trim()?`Còn thiếu/sai: ${R[i].miss.map(m=>`<b>${esc(m==="let us go"?"let's go":m)}</b>`).join(", ")}`:"Em chưa dịch câu này"}.<br>✓ Câu đúng: <i>${esc(t.m)}</i>`} <button class="speak" data-say="${esc(t.m)}" aria-label="Nghe câu mẫu">🔊</button></div>`:""}
+    </div></div>`).join("")}
+    <div class="actions">${TRS.done?`<button class="btn primary" id="trredo">Làm lại</button>`:`<button class="btn primary" id="trcheck">Chấm bài</button>`}</div></div>
+  <div id="trreview"></div>`;
+  box.querySelectorAll("[data-hint]").forEach(b=>b.onclick=()=>{const h=$("#hk"+b.dataset.hint);h.hidden=!h.hidden});
+  TR.forEach((t,i)=>{const ta=$("#tr"+i);ta.oninput=()=>{TRS.ans[i]=ta.value;store.set("trans",TRS)}});
+  if($("#trcheck"))$("#trcheck").onclick=()=>{TRS.done=true;store.set("trans",TRS);gradeTrans()};
+  if($("#trredo"))$("#trredo").onclick=()=>{TRS={ans:TR.map(()=>""),done:false};store.set("trans",TRS);drawTrans()};
+  if(TRS.done&&R)$("#trreview").innerHTML=reviewHTML("Dịch hội thoại 1",R.filter(x=>x.ok).length,TR.map((t,i)=>({q:`🇻🇳 ${esc(t.vi)}`,c:TRS.ans[i]||"(bỏ trống)",ans:t.m,ok:R[i].ok,ex:R[i].miss.length?`Cần dùng: ${R[i].miss.map(m=>`<b>${esc(m==="let us go"?"let's go":m)}</b> (${esc(KVI[m]||"")})`).join(", ")}`:""})));
+}
+function gradeTrans(){
+  const R=TR.map((t,i)=>checkTr(t,TRS.ans[i]));const sc=R.filter(x=>x.ok).length;
+  RES.trans={score:sc,n:TR.length,wrong:TR.map((t,i)=>R[i].ok?null:`${t.vi} → viết: "${TRS.ans[i]||"(bỏ trống)"}" · đúng: "${t.m}"`).filter(Boolean)};saveRes();
+  drawTrans();setTimeout(()=>{const r=$("#trreview");r&&r.scrollIntoView({behavior:"smooth",block:"start"})},50);
+}
+
+/* --- Hội thoại 2: Chat với AI --- */
+const CHAT_MAX=8;
+const BASIC_Q=["What's the weather like where you live today?","Is it the dry season or the rainy season now?","How do you feel when it's boiling hot?","What do you do when it's very hot?","What time does it usually rain in the rainy season?","What do you do when it's pouring and you're outside?","What problems does heavy rain cause in your city?","Which season do you prefer, and why?"];
+const REACT=["Nice!","I see.","Oh, really?","Interesting!","Good answer!","Me too!","Thanks for telling me.","Great!"];
+let CH=store.get("chat",null)||{msgs:[{r:"bot",t:"Hi! I'm your Weather Buddy. 🌤️ "+BASIC_Q[0]}],turns:0,errTurns:0,mode:null};
+let SAMPLE;let SAMPLE_READY=false;
+(async()=>{try{SAMPLE=window.claude&&window.claude.use?await window.claude.use("sample"):null}catch(e){SAMPLE=null}SAMPLE_READY=true;if(tab==="conv"&&CONV==="t2")drawChat()})();
+const saveChat=()=>store.set("chat",CH);
+const VN_RE=/[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/i;
+const CMP={hot:"hotter",cool:"cooler",cold:"colder",wet:"wetter",dry:"drier",sunny:"sunnier",rainy:"rainier"};
+const S3={go:"goes",have:"has",do:"does",make:"makes",get:"gets",last:"lasts",come:"comes",rain:"rains",start:"starts",stop:"stops",feel:"feels"};
+const FEELADJ={sweat:"sweaty",thirst:"thirsty",sleep:"sleepy",bore:"bored",boring:"bored",tire:"tired",hot:"hot"};
+const RULES=[
+ [/(?<!\b(?:does|did|do|will|can|could|should|would|to|let|make|makes|made|might|may) )\b(it|she|he) (go|have|do|make|get|last|come|rain|start|stop|feel)\b/gi,m=>{const[w,s,v]=m;return {fix:`${s} ${S3[v.toLowerCase()]}`,why:"Chủ ngữ số ít (it/he/she) ở hiện tại đơn → động từ thêm -s/-es."}}],
+ [/\bthe (rainy|dry) season last\b/gi,m=>({fix:`the ${m[1]} season lasts`,why:"Chủ ngữ số ít → lasts."})],
+ [/(?<!\b(?:is|was|make|makes|made|find|keep|like) )\b(it|the weather|today) ((?:very|so|too|really) )?(hot|cold|sunny|rainy|cloudy|humid|windy|nice|beautiful|cool|boiling hot|dry|wet|dusty)\b/gi,m=>({fix:`${m[1]} is ${m[2]||""}${m[3]}`,why:"Thiếu động từ to be: it is / the weather is…"})],
+ [/\bi (am|'m) (like|love|go|have|feel|want|think|prefer|stay|drink|wear|take|play|eat|sleep)\b/gi,m=>({fix:`I ${m[2]}`,why:"Không dùng am trước động từ thường."})],
+ [/\bmake(s)? me to\b/gi,m=>({fix:`make${m[1]||""} me`,why:"make + người + V nguyên mẫu (không có to)."})],
+ [/\bforget (bring|take|wear)\b/gi,m=>({fix:`forget to ${m[1]}`,why:"forget to + V: quên làm gì."})],
+ [/\bmore (hot|cool|cold|wet|dry|sunny|rainy)\b/gi,m=>({fix:CMP[m[1].toLowerCase()],why:"Tính từ ngắn so sánh hơn thêm -er: hotter, cooler…"})],
+ [/\bi (very|so) (like|love)\b/gi,m=>({fix:`I really ${m[2]}`,why:"Không đặt very/so trước động từ; dùng really."})],
+ [/\b(have|has) (many|much|a lot of) rain\b/gi,m=>({fix:"it rains a lot",why:"Nói: it rains a lot / there is a lot of rain."})],
+ [/\bit(?: is|'s) rain\b/gi,m=>({fix:"it's raining / it rains",why:"Dùng it's raining (đang mưa) hoặc it rains (thường mưa)."})],
+ [/\bi (?:feel|am|'m) (sweat|thirst|sleep|bore|boring|tire)\b/gi,m=>({fix:m[0].replace(m[1],FEELADJ[m[1].toLowerCase()]),why:"Sau feel/am dùng tính từ: sweaty, thirsty, sleepy, bored, tired."})],
+ [/\bvery (boiling|freezing|pouring|soaked)\b/gi,m=>({fix:`really ${m[1]}`,why:"boiling/soaked đã có nghĩa 'rất'; dùng really thay cho very."})],
+ [/\b(two|three|four|many) season\b/gi,m=>({fix:`${m[1]} seasons`,why:"Danh từ số nhiều thêm -s."})],
+ [/\bweathers\b/gi,m=>({fix:"weather",why:"weather là danh từ không đếm được, không thêm -s."})],
+ [/\bpeoples\b/gi,m=>({fix:"people",why:"people đã là số nhiều."})],
+ [/\bmore better\b/gi,m=>({fix:"better",why:"better đã là so sánh hơn."})],
+ [/\bon (the )?(rainy|dry) season\b/gi,m=>({fix:`in the ${m[2]} season`,why:"Dùng in với mùa: in the rainy season."})],
+ [/\bat (the )?(morning|afternoon|evening)\b/gi,m=>({fix:`in the ${m[2]}`,why:"in the morning / afternoon / evening (nhưng at night)."})],
+ [/\bin (the )?night\b/gi,m=>({fix:"at night",why:"Nói at night."})],
+ [/\b(they|we|you) is\b/gi,m=>({fix:`${m[1]} are`,why:"they/we/you đi với are."})],
+ [/\bi is\b/gi,m=>({fix:"I am",why:"I đi với am."})],
+ [/\bdon'?t has\b/gi,m=>({fix:"doesn't have",why:"doesn't + V nguyên mẫu: doesn't have."})],
+ [/\bvery like\b/gi,m=>({fix:"really like",why:"Dùng really like."})]
+];
+function basicCheck(t){
+  if(VN_RE.test(t))return {errors:[{wrong:t.slice(0,30)+(t.length>30?"…":""),fix:"(English)",why:"Em hãy trả lời bằng tiếng Anh nhé."}],corrected:"",vn:true};
+  const errors=[];let cor=t;
+  RULES.forEach(([re,f])=>{re.lastIndex=0;let m;while((m=re.exec(t))){const r=f(m);if(errors.length<3)errors.push({wrong:m[0],fix:r.fix,why:r.why});cor=cor.replace(m[0],r.fix.split(" / ")[0])}});
+  return {errors,corrected:errors.length?cor:""};
+}
+function chatPrompt(){
+  const conv=CH.msgs.map(m=>(m.r==="bot"?"Buddy: ":"Student: ")+m.t).join("\n");
+  return `You are "Weather Buddy", a friendly English speaking partner for a Vietnamese student (A2 level, age 10-17) who lives in southern Vietnam. There are two seasons there: the dry season (December-April: sunny, boiling hot, dusty, heatwaves) and the rainy season (May-November: sudden afternoon downpours, thunderstorms, flooded streets, traffic jams, power cuts). The student is practising everyday talk about the weather: asking about the weather, describing hot and rainy days, saying how they feel, giving advice, and talking about problems the weather causes.
+
+Do two things:
+1) Check ONLY the student's LAST message for real mistakes in grammar, word choice and spelling. Ignore capital letters, missing final punctuation and missing apostrophes. Do not mark natural informal answers as wrong. List at most 3 mistakes.
+2) Write your next message: react briefly and naturally to what the student said (one short sentence), then ask ONE new simple question about the weather in their life. Use simple A2 English, at most 25 words. Do not repeat a question you already asked. Use some of these words naturally when they fit: boiling hot, humid, pouring, thunderstorm, dark clouds, soaked, flooded, traffic jam, power cut, just in case, iced tea, cool breeze.
+If the last message is not in English or not about the weather, add one mistake explaining in Vietnamese that they should answer in English about the weather, and ask your question again.
+
+Return ONLY JSON, no other text:
+{"errors":[{"wrong":"exact words from the student","fix":"corrected words","why":"short explanation in Vietnamese, max 15 words"}],"corrected":"the student's whole message corrected, or empty string if no mistakes","reply":"your next message"}
+
+Conversation so far:
+${conv}`;
+}
+function chatModeLabel(){
+  if(CH.mode==="ai")return `<span class="mode ai">🤖 AI đang trò chuyện và chữa lỗi</span>`;
+  if(CH.mode==="basic")return `<span class="mode">🧩 Chế độ cơ bản: máy hỏi 8 câu cố định và chỉ bắt các lỗi hay gặp</span>`;
+  return "";
+}
+function drawChat(){
+  const box=$("#convbox");if(!box)return;
+  const can=!!AI_URL||SAMPLE!=null;
+  if(!CH.mode&&(AI_URL||SAMPLE_READY))CH.mode=can?"ai":"basic";
+  if(CH.mode==="basic"&&AI_URL&&CH.turns===0)CH.mode="ai";
+  const done=CH.turns>=CHAT_MAX;
+  box.innerHTML=`<p class="hint">Trò chuyện với Weather Buddy về thời tiết nơi em sống. Mỗi câu em gửi sẽ được chỉ lỗi sai (nếu có) và sửa lại, rồi Buddy hỏi tiếp. Trả lời <b>${CHAT_MAX} câu</b> để hoàn thành. Cố dùng từ vựng trên sơ đồ!</p>
+  <div class="chat card">
+   <div class="row" style="justify-content:space-between;margin-bottom:6px">${chatModeLabel()}<span class="hint" style="margin:0">Đã trả lời ${CH.turns}/${CHAT_MAX} · câu có lỗi: ${CH.errTurns}</span></div>
+   ${!can&&SAMPLE_READY?`<div class="note2">Hiện chưa kết nối được AI nên em đang dùng chế độ cơ bản.</div>`:""}
+   <div class="msgs" id="msgs">${CH.msgs.map(m=>msgHTML(m)).join("")}${CH.busy?`<div class="msg bot"><div class="bub">Buddy đang trả lời…</div></div>`:""}</div>
+   ${done?`<div class="donebox">🎉 Em đã hoàn thành ${CHAT_MAX} câu! Kết quả đã được ghi vào phần Nộp bài.</div><div class="actions"><button class="btn" id="chreset">Trò chuyện lại từ đầu</button><button class="btn primary" onclick="go('send')">Đến phần Nộp bài</button></div>`:
+   `<div class="chips2">${["boiling hot","humid","It's pouring","dark clouds","I'm soaked","flooded","traffic jam","power cut","just in case","iced tea","I feel","because"].map(w=>`<button class="chip2" data-ins="${esc(w)}">${esc(w)}</button>`).join("")}</div>
+   <form class="send" id="chform"><textarea id="chin" rows="2" placeholder="Gõ câu trả lời bằng tiếng Anh…" ${CH.busy?"disabled":""}></textarea><button class="btn primary" ${CH.busy?"disabled":""}>Gửi</button></form>
+   <div class="actions" style="margin-top:6px"><button class="linkbtn" id="chreset">Bắt đầu lại</button></div>`}
+  </div>`;
+  const ms=$("#msgs");ms.scrollTop=ms.scrollHeight;
+  if($("#chreset"))$("#chreset").onclick=()=>{CH={msgs:[{r:"bot",t:"Hi! I'm your Weather Buddy. 🌤️ "+BASIC_Q[0]}],turns:0,errTurns:0,mode:(AI_URL||SAMPLE)?"ai":"basic"};saveChat();RES.chat=null;saveRes();drawChat()};
+  if(done)return;
+  box.querySelectorAll("[data-ins]").forEach(b=>b.onclick=()=>{const ta=$("#chin");ta.value=(ta.value+" "+b.dataset.ins).trim()+" ";ta.focus()});
+  $("#chin").onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();$("#chform").requestSubmit()}};
+  $("#chform").onsubmit=e=>{e.preventDefault();const t=$("#chin").value.trim();if(t&&!CH.busy)sendChat(t)};
+  if(!CH.busy)$("#chin").focus({preventScroll:true});
+}
+function msgHTML(m){
+  if(m.r==="bot")return `<div class="msg bot"><div class="bub">${esc(m.t)} <button class="speak sm" data-say="${esc(m.t.replace(/[^\x20-\x7E]/g,""))}" aria-label="Nghe">🔊</button></div></div>`;
+  const errs=m.errors||[];
+  return `<div class="msg me"><div class="bub">${esc(m.t)}</div>${m.checked?(errs.length?`<div class="fixbox">${errs.map(x=>`<div>✗ <s>${esc(x.wrong)}</s> → <b>${esc(x.fix)}</b><span>${esc(x.why||"")}</span></div>`).join("")}${m.corrected?`<div class="cor">✓ Câu đúng: <i>${esc(m.corrected)}</i></div>`:""}</div>`:`<div class="okbox">✓ Không có lỗi</div>`):""}</div>`;
+}
+async function sendChat(t){
+  const me={r:"me",t,errors:[],checked:false};CH.msgs.push(me);CH.busy=true;drawChat();
+  let res=null;
+  if(CH.mode==="ai"&&AI_URL){
+    try{const r=await fetch(AI_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({type:"chat",history:CH.msgs.map(m=>({r:m.r,t:m.t}))}),redirect:"follow"});
+      const j=await r.json();if(j&&j.ok&&typeof j.reply==="string")res={errors:j.errors||[],corrected:j.corrected||"",reply:j.reply};
+    }catch(e){}
+  }else if(CH.mode==="ai"&&SAMPLE){
+    try{const out=await SAMPLE.json(chatPrompt(),{modelTier:"quick",cache:false});
+      if(out&&typeof out.reply==="string")res={errors:Array.isArray(out.errors)?out.errors.slice(0,3).filter(x=>x&&x.wrong&&x.fix):[],corrected:out.corrected||"",reply:out.reply};
+    }catch(e){if(e&&e.code==="not_granted"){CH.mode="basic"}}
+  }
+  if(!res){const b=basicCheck(t);const next=BASIC_Q[Math.min(CH.turns+1,BASIC_Q.length-1)];
+    res={errors:b.errors,corrected:b.corrected,reply:b.vn?BASIC_Q[Math.min(CH.turns,BASIC_Q.length-1)]:(REACT[CH.turns%REACT.length]+" "+next)};
+    if(b.vn){me.errors=res.errors;me.checked=true;CH.busy=false;CH.msgs.push({r:"bot",t:"Please answer in English. "+res.reply});saveChat();drawChat();return}}
+  me.errors=res.errors;me.corrected=res.corrected;me.checked=true;CH.turns++;if(res.errors.length)CH.errTurns++;
+  CH.msgs.push({r:"bot",t:CH.turns>=CHAT_MAX?"Great chat! You did really well talking about the weather. See you next time! 👋":res.reply});
+  CH.busy=false;
+  RES.chat={score:CH.turns-CH.errTurns,n:CH.turns,mode:CH.mode};saveRes();saveChat();drawChat();
+  if(CH.turns<CHAT_MAX)say(CH.msgs[CH.msgs.length-1].t);
+}
+function chatSummary(){
+  const lines=CH.msgs.filter(m=>m.r==="me").map((m,i)=>`${i+1}. ${m.t}${m.errors&&m.errors.length?` → sửa: ${m.corrected||m.errors.map(x=>x.wrong+"→"+x.fix).join("; ")}`:" ✓"}`);
+  return lines.length?`CHAT VỚI ${CH.mode==="ai"?"AI":"MÁY (cơ bản)"} (${CH.turns}/${CHAT_MAX} câu, ${CH.errTurns} câu có lỗi):\n`+lines.join("\n"):"";
+}
+
+/* ----- Tab 3: Kiểm tra 20 câu ----- */
+const QUIZ=[
+ ["Your friend asks: “What's the weather like today?” What's the best answer?",["It's hot and sunny.","It's Monday today.","I like the weather.","Yes, it is."],"Câu hỏi “What's the weather like?” → trả lời bằng It's + tính từ thời tiết."],
+ ["Your neighbour says: “Hot today, isn't it?” What's a natural reply?",["I know! It's boiling.","No, I'm not.","Yes, it isn't.","It's a hot."],"Đây là câu bắt chuyện, người ta chờ mình đồng ý: I know! / Yes, it's boiling!"],
+ ["You see dark clouds in the sky. What do you say?",["It's going to rain.","It rained yesterday.","It's going to sunny.","It will raining."],"Thấy dấu hiệu trước mắt → be going to + V: It's going to rain."],
+ ["“It's pouring!” means…",["It's raining very heavily.","It's very sunny.","It's very windy.","It's a little cloudy."],"pour = đổ, trút → It's pouring = mưa như trút nước."],
+ ["Your friend is going out, and it might rain. What do you say?",["Take an umbrella, just in case.","Put on some sunscreen.","Let's get some iced tea.","It's 36 degrees!"],"just in case = phòng khi (trời mưa)."],
+ ["You arrive at class late and wet. What do you say to your teacher?",["Sorry, I'm late. I got stuck in the rain.","Sorry, I'm early.","I'm dying for a cold drink.","Lovely weather today!"],"get stuck in the rain = bị mắc mưa, câu xin lỗi rất tự nhiên."],
+ ["“I'm dying for a cold drink.” means…",["I really want a cold drink.","I'm ill because of a cold drink.","I don't like cold drinks.","I'm making a cold drink."],"be dying for + N = rất muốn có cái gì (cách nói thân mật)."],
+ ["Complete: “It's ___ hot to play football outside.”",["too","so","very much","enough"],"too + tính từ + to V = quá… đến nỗi không thể…"],
+ ["Complete: “This heat makes me ___ lazy.”",["feel","to feel","feeling","feels"],"make + người + V nguyên mẫu: makes me feel."],
+ ["Complete: “Let's wait for the rain to ___.”",["stop","stops","stopping","stopped"],"wait for + N + to V (nguyên mẫu): wait for the rain to stop."],
+ ["Complete: “The rainy season ___ from May to November.”",["lasts","last","is lasting","lasted"],"Sự thật về khí hậu → hiện tại đơn; chủ ngữ số ít → lasts."],
+ ["“There's a power cut.” means…",["There's no electricity.","There's a short haircut.","The price is very low.","There's a strong wind."],"power cut = cúp điện, hay xảy ra khi giông bão."],
+ ["Which sentence talks about a PROBLEM caused by the weather?",["The streets are flooded again.","Lovely weather today!","I feel so cosy when it rains.","What's the forecast for tomorrow?"],"flooded streets = đường ngập, đây là rắc rối do mưa."],
+ ["You want to say the air is hot and wet before the rain. Which word do you use?",["humid","dusty","dry","cool"],"humid = oi, ẩm. dusty = nhiều bụi (mùa khô)."],
+ ["“Hot today, isn't it?” At “isn't it”, the voice usually goes…",["down ↘, because you expect the other person to agree","up ↗, because you really don't know","flat, with no change","up and then stops suddenly"],"Câu hỏi đuôi để bắt chuyện, chờ người kia đồng ý → xuống giọng ↘."],
+ ["Complete: “Take an umbrella, just in ___.”",["case","time","rain","place"],"just in case = phòng khi."],
+ ["Your friend says: “I'm soaked!” What happened?",["She got very wet in the rain.","She is very hungry.","She is very hot.","She is very tired."],"soaked = ướt sũng."],
+ ["Which sentence is correct?",["It's too hot to go out.","It's too hot for go out.","It's very hot to go out.","It's too hot going out."],"too + tính từ + to V: It's too hot to go out."],
+ ["Complete: “In the rainy season, it usually ___ in the late afternoon.”",["rains","rain","raining","is rain"],"Thói quen → hiện tại đơn; chủ ngữ it → rains."],
+ ["Someone says: “Lovely weather today!” What's a natural reply?",["Yes, it's beautiful!","No, I'm not lovely.","Yes, I do.","It's a weather."],"Đồng ý một cách tự nhiên: Yes, it's beautiful! / It really is!"]
+].map(a=>({q:a[0],ans:a[1][0],opts:a[1],ex:a[2]}));
+let QZ=null;
+function startQuiz(){QZ={qs:shuffle(QUIZ).map(q=>({...q,opts:shuffle(q.opts)})),i:0,ans:{}};drawQ()}
+function drawQ(){
+  const q=QZ.qs[QZ.i],N=QZ.qs.length,last=QZ.i===N-1,done=Object.keys(QZ.ans).length;
+  $("#main").innerHTML=`<div class="card" style="max-width:760px">
+   <div class="meta"><span>Câu ${QZ.i+1}/${N}</span><span>Đã trả lời ${done}/${N}</span></div><div class="bar"><i style="width:${done/N*100}%"></i></div>
+   <div class="q">${esc(q.q)}</div>
+   <div class="opts">${q.opts.map((o,k)=>`<button class="opt ${QZ.ans[QZ.i]===o?"sel":""}" data-k="${k}">${esc(o)}</button>`).join("")}</div>
+   <div class="actions"><button class="btn" id="qprev" ${QZ.i?"":"disabled"}>Câu trước</button>
+   ${last?`<button class="btn primary" id="qsub" ${done<N?"disabled":""}>Nộp bài</button>`:`<button class="btn primary" id="qnext" ${QZ.ans[QZ.i]?"":"disabled"}>Câu tiếp</button>`}</div>
+   ${last&&done<N?`<p class="hint" style="margin-top:8px">Còn ${N-done} câu chưa trả lời. Bấm “Câu trước” để quay lại.</p>`:""}</div>`;
+  document.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{QZ.ans[QZ.i]=q.opts[+b.dataset.k];drawQ()});
+  $("#qprev").onclick=()=>{QZ.i--;drawQ()};
+  if($("#qnext"))$("#qnext").onclick=()=>{QZ.i++;drawQ()};
+  if($("#qsub"))$("#qsub").onclick=gradeQuiz;
+}
+function gradeQuiz(){
+  const rows=QZ.qs.map((q,i)=>({q:esc(q.q),raw:q.q,c:QZ.ans[i],ans:q.ans,ok:QZ.ans[i]===q.ans,ex:esc(q.ex)}));
+  const sc=rows.filter(r=>r.ok).length;
+  RES.quiz={score:sc,n:rows.length,wrong:rows.filter(r=>!r.ok).map(r=>`${r.raw}: chọn "${r.c}" → đúng "${r.ans}"`)};saveRes();
+  $("#main").innerHTML=reviewHTML("Kiểm tra",sc,rows)+`<div class="actions"><button class="btn" onclick="startQuiz()">Làm lại</button></div>`;
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* ----- Tab 4: Nói về nơi em sống ----- */
+const OPT={
+ city:[["Ho Chi Minh City","TP. Hồ Chí Minh"],["Binh Duong","Bình Dương"],["Dong Nai","Đồng Nai"],["Can Tho","Cần Thơ"],["Vung Tau","Vũng Tàu"],["Long An","Long An"],["Tay Ninh","Tây Ninh"],["Ben Tre","Bến Tre"],["Tien Giang","Tiền Giang"]],
+ dw:[["sunny","nắng"],["hot","nóng"],["boiling hot","nóng như đổ lửa"],["dry","khô hanh"],["dusty","nhiều bụi"],["windy","có gió"],["humid at night","oi vào ban đêm"]],
+ deg:[["34","34"],["35","35"],["36","36"],["37","37"],["38","38"]],
+ dx:[["Around Tết, the mornings are cool and a bit windy.","Khoảng dịp Tết, buổi sáng mát và hơi có gió."],["In March and April, we often have a heatwave.","Tháng 3, tháng 4 thường có đợt nắng nóng."],["There isn't a cloud in the sky.","Trời không một gợn mây."],["The sun is really strong at noon.","Buổi trưa nắng rất gắt."],["Many people go to the beach at the weekend.","Cuối tuần nhiều người đi biển."],["Some places in the Mekong Delta get salty water.","Một số nơi ở miền Tây bị nhiễm mặn."]],
+ df:[["sweaty","đổ mồ hôi"],["thirsty","khát nước"],["tired","mệt"],["sleepy","buồn ngủ"],["lazy","lười"],["grumpy","cáu kỉnh"],["uncomfortable","khó chịu"]],
+ da:[["drink lots of water","uống thật nhiều nước"],["turn on the fan","bật quạt"],["turn on the air conditioner","bật máy lạnh"],["stay indoors at noon","ở trong nhà vào buổi trưa"],["put on sunscreen","thoa kem chống nắng"],["wear a sun-protection jacket and a face mask on my motorbike","mặc áo chống nắng và đeo khẩu trang khi đi xe máy"],["have a glass of iced tea","uống một ly trà đá"],["drink sugarcane juice","uống nước mía"],["eat ice cream","ăn kem"],["take a cool shower","tắm nước mát"]],
+ dr:[["I get sunburnt","mình bị cháy nắng"],["I can't sleep well at night","mình không ngủ ngon vào ban đêm"],["there's a power cut","bị cúp điện"],["I get a headache","mình bị nhức đầu"],["our electricity bill goes up","hóa đơn tiền điện tăng"],["the plants in my garden dry up","cây trong vườn bị khô héo"]],
+ when:[["in the late afternoon","vào cuối buổi chiều"],["in the evening","vào buổi tối"],["at night","vào ban đêm"],["very suddenly","rất bất ngờ"],["right when school finishes","ngay lúc tan học"]],
+ dur:[["for about an hour","khoảng một tiếng"],["for two or three hours","khoảng hai, ba tiếng"],["all night","cả đêm"],["for a few minutes, and then the sun comes out again","vài phút rồi lại nắng"]],
+ rw:[["a big thunderstorm with thunder and lightning","trận giông lớn có sấm chớp"],["a heavy downpour","trận mưa như trút nước"],["a strong wind before the rain","cơn gió mạnh trước khi mưa"],["a storm in October or November","cơn bão vào tháng 10 hoặc tháng 11"],["a high tide that floods the streets","triều cường làm ngập đường"]],
+ ra:[["put on my raincoat","mặc áo mưa"],["wait for the rain to stop","chờ mưa tạnh"],["take shelter under a shop's roof","trú mưa dưới mái hiên"],["stay at home","ở nhà"],["carry an umbrella","mang theo ô"],["put my phone in a plastic bag","cho điện thoại vào túi ni-lông"],["ride slowly and carefully","chạy xe chậm và cẩn thận"],["check the weather forecast on my phone","xem dự báo thời tiết trên điện thoại"]],
+ rr:[["The streets get flooded, and there are big traffic jams.","Đường bị ngập và kẹt xe rất nặng."],["Sometimes I get soaked on my way home.","Đôi khi mình bị ướt sũng trên đường về nhà."],["Sometimes I'm late for school.","Đôi khi mình bị trễ học."],["My clothes don't dry for days.","Quần áo phơi mấy ngày không khô."],["Sometimes our motorbike breaks down in the flood.","Đôi khi xe máy nhà mình chết máy trong nước ngập."],["There are lots of mosquitoes, so we have to be careful of dengue fever.","Có nhiều muỗi nên phải cẩn thận bệnh sốt xuất huyết."],["Some trees fall down in strong winds.","Một số cây bị đổ khi gió mạnh."],["After the rain, the air is fresh and the trees are green.","Sau mưa không khí trong lành và cây cối xanh tươi."]],
+ rf:[["cosy","ấm cúng"],["sleepy","buồn ngủ"],["relaxed","thư thái"],["annoyed","bực mình"],["a bit scared of the thunder","hơi sợ sấm"],["happy because it's cooler","vui vì trời mát hơn"]],
+ fav:[["dry season","mùa khô"],["rainy season","mùa mưa"]],
+ reason_dry:[["I can go out and play football","mình được ra ngoài đá bóng"],["my clothes dry quickly","quần áo khô nhanh"],["I don't get wet on my way to school","mình không bị ướt khi đi học"],["Tết and the summer holiday are in the dry season","Tết và kỳ nghỉ hè đều rơi vào mùa khô"],["the sky is clear and beautiful","bầu trời trong xanh và đẹp"]],
+ reason_rainy:[["the air is cool and fresh after the rain","sau cơn mưa không khí mát và trong lành"],["I can sleep well on cool nights","đêm mát nên mình ngủ ngon"],["I love the sound of the rain","mình thích nghe tiếng mưa"],["I can eat hot noodles and feel cosy","mình được ăn mì nóng và thấy ấm cúng"],["the trees and rice fields are green","cây cối và ruộng lúa xanh tươi"]]
+};
+const MAX={dw:4,dx:4,df:4,da:4,dr:4,rw:4,ra:4,rr:4,rf:4,reason:4};
+const MIN={dx:0};
+const DEF={city:[0],cityCustom:"",dw:[0,1,3],deg:[2],dx:[1],df:[0,1],da:[0,1,5],dr:[1,2],when:[0],dur:[0],rw:[0,4],ra:[0,5],rr:[0,5],rf:[0,4],fav:[1],reason:[0,3]};
+let TK=Object.assign({},DEF,store.get("talk3",{}));
+let manual=store.get("talkManual3",null);
+let readCount=store.get("readCount",0);
+const LST=k=>k==="reason"?OPT["reason_"+(TK.fav[0]===0?"dry":"rainy")]:OPT[k];
+const pickV=(k,lang)=>{const L=LST(k);return (TK[k]||[]).map(i=>L[i]).filter(Boolean).map(o=>lang==="vi"?o[1]:o[0])};
+const andJ=(a,vi)=>a.length<2?a.join(""):a.slice(0,-1).join(", ")+(vi?" và ":" and ")+a[a.length-1];
+function buildTalk(){
+  const cityEn=TK.cityCustom.trim()||pickV("city")[0],cityVi=TK.cityCustom.trim()||pickV("city","vi")[0];
+  const deg=pickV("deg")[0];
+  const en=[
+   [`I live in ${cityEn}, in the south of Vietnam.`,`Here, we don't have four seasons like in the north.`,`We only have two: the dry season and the rainy season.`],
+   [`The dry season lasts from December to April.`,`It's ${andJ(pickV("dw"))} almost every day, and in April it can be ${deg} degrees.`,...pickV("dx"),`When it's that hot, I feel ${andJ(pickV("df"))}, so I ${andJ(pickV("da"))}.`,`Sometimes ${andJ(pickV("dr"))}.`],
+   [`The rainy season lasts from May to November.`,`It often rains ${pickV("when")[0]}, usually ${pickV("dur")[0]}.`,`Sometimes there's ${andJ(pickV("rw"))}.`,`When it rains, I ${andJ(pickV("ra"))}.`,...pickV("rr"),`On rainy days, I feel ${andJ(pickV("rf"))}.`],
+   [`To be honest, I prefer the ${pickV("fav")[0]}, because ${andJ(pickV("reason"))}.`]
+  ];
+  const vi=[
+   `Mình sống ở ${cityVi}, miền Nam Việt Nam. Ở đây không có bốn mùa như miền Bắc. Chỉ có hai mùa: mùa khô và mùa mưa.`,
+   `Mùa khô kéo dài từ tháng 12 đến tháng 4. Hầu như ngày nào cũng ${andJ(pickV("dw","vi"),1)}, tháng 4 có thể lên tới ${deg} độ. ${pickV("dx","vi").join(" ")} Khi nóng như vậy, mình thấy ${andJ(pickV("df","vi"),1)}, nên mình ${andJ(pickV("da","vi"),1)}. Thỉnh thoảng ${andJ(pickV("dr","vi"),1)}.`,
+   `Mùa mưa kéo dài từ tháng 5 đến tháng 11. Trời thường mưa ${pickV("when","vi")[0]}, thường ${pickV("dur","vi")[0]}. Đôi khi có ${andJ(pickV("rw","vi"),1)}. Khi trời mưa, mình ${andJ(pickV("ra","vi"),1)}. ${pickV("rr","vi").join(" ")} Những ngày mưa, mình thấy ${andJ(pickV("rf","vi"),1)}.`,
+   `Thật lòng thì mình thích ${pickV("fav","vi")[0]} hơn, vì ${andJ(pickV("reason","vi"),1)}.`
+  ];
+  return {en,vi,text:en.map(p=>p.join(" ")).join("\n\n")};
+}
+function fieldHTML(k,label,note){
+  const L=LST(k),max=MAX[k]||1,min=MIN[k]??1;
+  const n=max>1?(min===0?`(không bắt buộc, chọn tối đa ${max})`:`(chọn 2–${max} ý)`):"";
+  return `<div class="field"><span class="lab">${label} <small>${note||n}</small></span><div class="picks" data-k="${k}">${L.map((o,i)=>`<button class="pick" data-i="${i}" aria-pressed="${(TK[k]||[]).includes(i)}">${esc(o[0])}<small>${esc(o[1])}</small></button>`).join("")}</div></div>`;
+}
+function drawTalk(){
+  $("#main").innerHTML=`<div class="tipbox">🧭 <b>Cách nói:</b> 4 phần theo thứ tự <b>Where</b> (em sống ở đâu, mấy mùa) → <b>Dry season</b> → <b>Rainy season</b> → <b>Which I prefer</b>. Trong mỗi mùa, nói theo chuỗi <b>Weather → Feeling → Action → Result</b>. Mỗi mục em chọn <b>2–4 ý</b> đúng với nơi em sống; bài nói của em hiện ở bên phải. Đọc to ít nhất 3 lần.</div>
+  <div class="bgrid"><div style="display:grid;gap:12px">
+   <div class="step" style="--c:var(--pat)"><h3>① Where do you live?</h3><p class="q2">Em sống ở đâu?</p>${fieldHTML("city","Thành phố / tỉnh")}
+     <div class="field"><span class="lab">Hoặc gõ tên nơi khác <small>(không dấu, ví dụ: Tra Vinh)</small></span><input class="custom" id="cityCustom" value="${esc(TK.cityCustom)}" placeholder="Tra Vinh"></div></div>
+   <div class="step" style="--c:var(--dry)"><h3>② Dry season ☀️</h3><p class="q2">Mùa khô: thời tiết → cảm xúc → hành động → kết quả</p>
+     ${fieldHTML("dw","Weather · thời tiết")}${fieldHTML("deg","Nhiệt độ tháng 4 (độ C)")}${fieldHTML("dx","Thêm chi tiết về mùa khô")}${fieldHTML("df","Feeling · cảm xúc")}${fieldHTML("da","Action · em làm gì")}${fieldHTML("dr","Result · chuyện xảy ra")}</div>
+   <div class="step" style="--c:var(--rainy)"><h3>③ Rainy season 🌧️</h3><p class="q2">Mùa mưa: mưa khi nào, bao lâu, em làm gì, chuyện gì xảy ra</p>
+     ${fieldHTML("when","Khi nào mưa")}${fieldHTML("dur","Mưa bao lâu")}${fieldHTML("rw","Weather · kiểu mưa, bão")}${fieldHTML("ra","Action · em làm gì")}${fieldHTML("rr","Result · chuyện xảy ra")}${fieldHTML("rf","Feeling · cảm xúc")}</div>
+   <div class="step" style="--c:var(--feel)"><h3>④ Which season do you prefer?</h3><p class="q2">Em thích mùa nào hơn, vì sao?</p>${fieldHTML("fav","Mùa em thích")}${fieldHTML("reason","Lý do")}</div>
+  </div>
+  <div class="card talk" id="talkcard"></div></div>`;
+  document.querySelectorAll(".picks").forEach(g=>g.addEventListener("click",e=>{
+    const b=e.target.closest(".pick");if(!b)return;const k=g.dataset.k,i=+b.dataset.i,max=MAX[k]||1,min=MIN[k]??1;let cur=(TK[k]||[]).slice();
+    if(max===1)cur=[i];else if(cur.includes(i)){if(cur.length>min)cur=cur.filter(x=>x!==i)}else{if(cur.length>=max){showNote(g,`Tối đa ${max} ý. Bỏ chọn một ý trước nhé.`);return}cur.push(i)}
+    TK[k]=cur;if(k==="city")TK.cityCustom="";if(k==="fav")TK.reason=[0];
+    store.set("talk3",TK);manual=null;store.set("talkManual3",null);
+    if(k==="fav"||k==="city"){drawTalk();return}
+    g.querySelectorAll(".pick").forEach(x=>x.setAttribute("aria-pressed",cur.includes(+x.dataset.i)));drawTalkCard();
+  }));
+  $("#cityCustom").oninput=e=>{TK.cityCustom=e.target.value;store.set("talk3",TK);manual=null;drawTalkCard()};
+  drawTalkCard();
+}
+function showNote(g,msg){let n=g.parentElement.querySelector(".pnote");if(!n){n=document.createElement("div");n.className="pnote";g.parentElement.appendChild(n)}n.textContent=msg;clearTimeout(n._t);n._t=setTimeout(()=>n.remove(),2500)}
+let EDIT=false;
+function talkText(){return manual!=null?manual:buildTalk().text}
+function drawTalkCard(){
+  const T=buildTalk(),c=$("#talkcard");if(!c)return;
+  const sents=manual!=null?null:T.en;
+  c.innerHTML=`<h3>Bài nói của em</h3>
+   ${EDIT?`<textarea id="ttext" aria-label="Sửa bài nói">${esc(talkText())}</textarea><div class="actions"><button class="btn primary" id="tdone">Xong</button>${manual!=null?`<button class="btn" id="treset">↺ Tạo lại từ lựa chọn</button>`:""}</div>`:
+   `<div class="talktext" id="ttxt">${sents?sents.map((p,pi)=>`<p>${p.map((s,si)=>`<span class="s" data-s="${pi}-${si}">${esc(s)}</span>`).join(" ")}</p>`).join(""):talkText().split(/\n+/).map(p=>`<p>${esc(p)}</p>`).join("")}</div>
+   <div class="actions"><button class="btn primary" id="tplay">🔊 Nghe cả bài</button><button class="btn" id="tslow">🐢 Nghe chậm</button><button class="btn" id="tedit">✏️ Sửa tay</button></div>
+   <div class="recbox" id="recbox"></div>
+   <div class="ticks">Em đã đọc to: ${[1,2,3].map(n=>`<button class="tick" data-n="${n}" aria-pressed="${readCount>=n}">${readCount>=n?"✓":""} Lần ${n}</button>`).join("")}</div>
+   <details style="margin-top:12px"><summary style="cursor:pointer;font-weight:600">🇻🇳 Xem nghĩa tiếng Việt</summary><div class="talkvi" style="margin-top:8px">${manual!=null?`<p>(Em đã sửa tay nên phần dịch có thể không khớp.)</p>`:""}${T.vi.map(p=>`<p>${esc(p)}</p>`).join("")}</div></details>
+   <p class="hint" style="margin-top:10px">${talkText().split(/\s+/).length} từ · nói chậm, rõ khoảng 1 phút.</p>`}`;
+  if(EDIT){$("#ttext").focus();$("#tdone").onclick=()=>{manual=$("#ttext").value;store.set("talkManual3",manual);EDIT=false;drawTalkCard()};
+    if($("#treset"))$("#treset").onclick=()=>{manual=null;store.set("talkManual3",null);EDIT=false;drawTalkCard()};return}
+  $("#tedit").onclick=()=>{EDIT=true;drawTalkCard()};
+  drawRec();
+  $("#tplay").onclick=()=>playTalk(false);$("#tslow").onclick=()=>playTalk(true);
+  c.querySelectorAll(".tick").forEach(b=>b.onclick=()=>{const n=+b.dataset.n;readCount=readCount>=n?n-1:n;store.set("readCount",readCount);RES.read=readCount;saveRes();drawTalkCard()});
+}
+
+/* ----- Ghi âm bài nói (tự gửi về Drive của giáo viên) ----- */
+let RECS=store.get("recs",[]),RECST={on:false};
+const recUrls={};
+function pickMime(){if(!window.MediaRecorder)return"";for(const m of["audio/webm;codecs=opus","audio/mp4","audio/webm","audio/ogg"])if(MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(m))return m;return""}
+function drawRec(){
+  const b=$("#recbox");if(!b)return;
+  b.innerHTML=`<div class="rechead"><b>🎙 Ghi âm bài nói</b><span class="hint" style="margin:0">Nhìn bài và nói to, khoảng 1 phút. Bài ghi âm tự gửi cho thầy/cô.</span></div>
+   <div class="row"><button class="btn ${RECST.on?"recon":"primary"}" id="recbtn">${RECST.on?"⏹ Dừng và gửi":"🎙 Bắt đầu ghi âm"}</button><span class="rectime" id="rectime">${RECST.on?fmtT(RECST.sec):""}</span></div>
+   <div id="recmsg" class="tip"></div>
+   <div class="reclist">${RECS.map((r,i)=>`<div class="recitem"><span>Lần ${i+1} · ${fmtT(r.dur)}</span>${recUrls[i]?`<audio controls src="${recUrls[i]}"></audio>`:""}<span class="${r.st==="ok"?"sent-ok":r.st==="bad"?"sent-bad":"sent-wait"}">${r.st==="ok"?"✅ Đã gửi thầy/cô":r.st==="bad"?"⚠️ Chưa gửi được":"⏳ Đang gửi…"}</span>${r.st==="bad"&&recBlobs[i]?`<button class="linkbtn" data-retry="${i}">Gửi lại</button>`:""}</div>`).join("")}</div>`;
+  $("#recbtn").onclick=()=>RECST.on?stopRec():startRec();
+  b.querySelectorAll("[data-retry]").forEach(x=>x.onclick=()=>uploadRec(+x.dataset.retry));
+}
+const recBlobs={};
+const fmtT=s=>`${Math.floor(s/60)}:${String(Math.round(s%60)).padStart(2,"0")}`;
+async function startRec(){
+  const msg=t=>{const m=$("#recmsg");if(m)m.innerHTML=t};
+  if(!ST.name.trim()){msg(`<span class="warn">Em gõ họ tên ở đầu trang trước khi ghi âm nhé.</span>`);$("#sname").focus();return}
+  if(!navigator.mediaDevices||!window.MediaRecorder){msg("Trình duyệt này chưa ghi âm được. Hãy mở bằng Chrome (máy tính/Android) hoặc Safari (iPhone).");return}
+  let s;try{s=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}})}catch(e){msg(`<span class="warn">Máy chưa cho dùng micro. Em bấm <b>Cho phép</b> (Allow) khi trình duyệt hỏi, hoặc bật micro trong phần cài đặt của trình duyệt.</span>`);return}
+  const mime=pickMime();let mr;try{mr=new MediaRecorder(s,mime?{mimeType:mime,audioBitsPerSecond:48000}:{})}catch(e){mr=new MediaRecorder(s)}
+  const chunks=[];mr.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
+  mr.onstop=()=>{s.getTracks().forEach(t=>t.stop());const blob=new Blob(chunks,{type:mr.mimeType||"audio/webm"});const i=RECS.length;
+    RECS.push({dur:RECST.sec,st:"wait"});recBlobs[i]=blob;recUrls[i]=URL.createObjectURL(blob);store.set("recs",RECS);RES.rec={n:RECS.length};saveRes();drawRec();uploadRec(i)};
+  RECST={on:true,sec:0,mr};mr.start(1000);drawRec();
+  RECST.t=setInterval(()=>{RECST.sec++;const el=$("#rectime");if(el)el.textContent=fmtT(RECST.sec)+" / 3:00";if(RECST.sec>=180)stopRec()},1000);
+}
+function stopRec(){if(!RECST.on)return;clearInterval(RECST.t);RECST.on=false;try{RECST.mr.stop()}catch(e){}}
+function b64(blob){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(String(r.result).split(",")[1]);r.onerror=rej;r.readAsDataURL(blob)})}
+async function uploadRec(i){
+  const blob=recBlobs[i];if(!blob)return;RECS[i].st="wait";drawRec();
+  const ext=/mp4/.test(blob.type)?"m4a":/ogg/.test(blob.type)?"ogg":"webm";
+  const body=JSON.stringify({type:"audio",name:ST.name.trim(),lesson:LESSON,file:`NoiVeNoiEmSong_Lan${String(i+1).padStart(2,"0")}.${ext}`,mime:blob.type.split(";")[0],label:`Nói về nơi em sống – lần ${i+1}`,target:talkText().slice(0,1500),transcript:"",score:null,dur:RECS[i].dur,audio:await b64(blob)});
+  let ok=false;
+  try{const r=await fetch(SPEAK_URL,{method:"POST",body,headers:{"Content-Type":"text/plain;charset=utf-8"},redirect:"follow"});const j=await r.json();ok=!!j.ok}
+  catch(e){if(e instanceof TypeError){try{await fetch(SPEAK_URL,{method:"POST",body,mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"}});ok=true}catch(e2){}}}
+  RECS[i].st=ok?"ok":"bad";store.set("recs",RECS);RES.rec={n:RECS.length,sent:RECS.filter(r=>r.st==="ok").length};saveRes();drawRec();
+}
+let PLAYING=false;
+function playTalk(slow){
+  if(PLAYING){PLAYING=false;try{speechSynthesis.cancel()}catch(e){};document.querySelectorAll(".s.now").forEach(x=>x.classList.remove("now"));return}
+  const spans=[...document.querySelectorAll("#ttxt .s")];
+  const list=spans.length?spans.map(s=>({t:s.textContent,el:s})):talkText().split(/(?<=[.!?])\s+/).map(t=>({t,el:null}));
+  PLAYING=true;let i=0;
+  const next=()=>{document.querySelectorAll(".s.now").forEach(x=>x.classList.remove("now"));
+    if(!PLAYING||i>=list.length||tab!=="talk"){PLAYING=false;return}
+    const it=list[i++];if(it.el)it.el.classList.add("now");say(it.t,{slow,onend:()=>setTimeout(next,280)})};
+  next();
+}
+
+/* ----- Tab 6: Nộp bài ----- */
+function drawSend(){
+  const r=k=>RES[k]?`${RES[k].score}/${RES[k].n}`:"chưa làm";
+  const need=!ST.name.trim();
+  $("#main").innerHTML=`<div class="card" style="max-width:780px">
+   <h2 style="font-family:var(--word);margin:0 0 8px">Gửi kết quả cho giáo viên</h2>
+   <table><tbody>
+    <tr><td>💬 Hội thoại 1: Dịch câu</td><td class="n">${r("trans")}</td></tr>
+    <tr><td>🤖 Hội thoại 2: Chat</td><td class="n">${RES.chat?`${RES.chat.n}/${CHAT_MAX} câu · ${RES.chat.n-RES.chat.score} câu có lỗi`:"chưa làm"}</td></tr>
+    <tr><td>✅ Kiểm tra</td><td class="n">${r("quiz")}</td></tr>
+    <tr><td>🗣 Bài nói về nơi em sống</td><td class="n">${talkText().split(/\s+/).length} từ · đọc to ${readCount}/3 lần · ghi âm ${RECS.filter(r=>r.st==="ok").length} lần đã gửi</td></tr>
+   </tbody></table>
+   ${need?`<p class="warn" style="margin-top:12px">Em gõ họ tên ở đầu trang trước khi gửi nhé.</p>`:""}
+   <div class="actions"><a class="btn primary ${need?"off":""}" id="gf" href="${esc(formLink())}" target="_blank" rel="noopener">Gửi qua Google Form</a><button class="btn" id="copy">Sao chép kết quả</button></div>
+   <p class="hint" style="margin-top:8px">Google Form sẽ mở ra với điểm và bài nói đã điền sẵn. Em chỉ cần bấm <b>Gửi</b> (Submit) trên form, không cần đăng nhập. Nếu không mở được, bấm “Sao chép kết quả” rồi gửi cho thầy/cô qua Zalo.</p>
+   <textarea id="rtext" readonly rows="8">${esc(resultText())}</textarea></div>`;
+  $("#copy").onclick=async()=>{const t=$("#rtext");let ok=false;try{await navigator.clipboard.writeText(t.value);ok=true}catch(e){}
+    if(!ok){try{t.select();ok=document.execCommand("copy")}catch(e){}}$("#copy").textContent=ok?"Đã sao chép":"Hãy bôi đen và sao chép thủ công"};
+}
+function scoreLine(){const r=k=>RES[k]?`${RES[k].score}/${RES[k].n}`:"–";return `Dịch HT1 ${r("trans")} · Chat ${RES.chat?`${RES.chat.n} câu (${RES.chat.n-RES.chat.score} lỗi)`:"–"} · Kiểm tra ${r("quiz")} · Đọc to ${readCount}/3 · Ghi âm ${RECS.filter(r=>r.st==="ok").length} lần`}
+function detailText(){
+  const parts=[];
+  [["trans","Dịch HT1 – sai"],["quiz","Kiểm tra – sai"]].forEach(([k,t])=>{if(RES[k]&&RES[k].wrong&&RES[k].wrong.length)parts.push(t+":\n- "+RES[k].wrong.join("\n- "))});
+  const cs=chatSummary();if(cs)parts.push(cs);
+  parts.push("BÀI NÓI:\n"+talkText());
+  return parts.join("\n\n");
+}
+function resultText(){return `Họ tên: ${ST.name||"(chưa nhập)"}\nBài: ${LESSON}\nĐiểm: ${scoreLine()}\nNộp lúc: ${new Date().toLocaleString("vi-VN")}\n\n${detailText()}`}
+function formLink(){
+  const e=SUBMIT.entries,p=new URLSearchParams();p.set("usp","pp_url");
+  p.set("entry."+e.name,ST.name);p.set("entry."+e.quiz,LESSON);p.set("entry."+e.score,scoreLine());
+  let d=detailText();if(d.length>2600)d=d.slice(0,2590)+"…";p.set("entry."+e.detail,d);
+  return SUBMIT.formUrl+"?"+p.toString();
+}
+
+/* ===== KHỞI ĐỘNG ===== */
+const h0=(location.hash||"").slice(1);go(TABS.includes(h0)?h0:"map");
+</script>
+
+</body>
+</html>
